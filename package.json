@@ -7,11 +7,17 @@
     "dev:web": "pnpm --filter web dev",
     "dev:ui": "pnpm --filter @clicksign/design-system dev",
     "lint": "turbo run lint",
+    "lint:fix": "turbo run lint:fix",
     "check-types": "turbo run check-types"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@stylistic/eslint-plugin": "^5.10.0",
+    "eslint": "^10.2.0",
+    "eslint-plugin-vue": "^10.8.0",
     "turbo": "^2.9.6",
-    "typescript": "5.9.2"
+    "typescript": "5.9.2",
+    "typescript-eslint": "^8.58.1"
   },
   "packageManager": "pnpm@9.0.0",
   "engines": {

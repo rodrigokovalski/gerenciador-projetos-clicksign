@@ -1,61 +1,61 @@
-import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import type { Meta, StoryObj } from "@storybook/vue3-vite";
 
-import Button from './Button.vue'
+import Button from "./Button.vue";
 
 type ButtonStoryArgs = {
-  variant?: 'primary' | 'outlined';
+  variant?: "primary" | "outlined";
   children?: string;
   disabled?: boolean;
-}
+};
 
 const meta: Meta<ButtonStoryArgs> = {
-  title: 'Components/Button',
+  title: "Components/Button",
   component: Button,
-  tags: ['autodocs'],
+  tags: ["autodocs"],
   argTypes: {
     variant: {
-      control: 'select',
-      options: ['primary', 'outlined'],
+      control: "select",
+      options: ["primary", "outlined"],
     },
     children: {
-      control: 'text',
-      description: 'Conteúdo do slot default',
+      control: "text",
+      description: "Conteúdo do slot default",
     },
     disabled: {
-      control: 'boolean',
+      control: "boolean",
     },
   },
-  render: (args) => ({
+  render: args => ({
     components: { Button },
     setup() {
-      return { args }
+      return { args };
     },
     template:
-      '<Button :variant="args.variant" :disabled="args.disabled">{{ args.children }}</Button>',
+      "<Button :variant=\"args.variant\" :disabled=\"args.disabled\">{{ args.children }}</Button>",
   }),
-}
+};
 
-export default meta
-type Story = StoryObj<typeof meta>
+export default meta;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    children: 'Button',
-    variant: 'primary',
+    children: "Button",
+    variant: "primary",
   },
-}
+};
 
 export const Outlined: Story = {
   args: {
-    children: 'Secundário',
-    variant: 'outlined',
+    children: "Secundário",
+    variant: "outlined",
   },
-}
+};
 
 export const Disabled: Story = {
   args: {
-    children: 'Button',
-    variant: 'primary',
+    children: "Button",
+    variant: "primary",
     disabled: true,
   },
-}
+};

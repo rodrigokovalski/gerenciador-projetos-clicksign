@@ -1,14 +1,14 @@
 <script setup lang="ts">
 withDefaults(
   defineProps<{
-    variant?: 'primary' | 'outlined',
-    disabled?: boolean,
+    variant?: "primary" | "outlined";
+    disabled?: boolean;
   }>(),
   {
-    variant: 'primary',
+    variant: "primary",
     disabled: false,
   },
-)
+);
 
 </script>
 
