@@ -15,6 +15,7 @@
     "@clicksign/design-system": "workspace:*",
     "@clicksign/icons": "workspace:*",
     "@clicksign/tokens": "workspace:*",
+    "@nuxt/image": "2.0.0",
     "nuxt": "^4.4.2",
     "vue": "^3.5.32",
     "vue-router": "^5.0.4"
