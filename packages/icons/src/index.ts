@@ -1,5 +1,6 @@
 export { default as TrashIcon } from "./trash/index.vue";
 export { default as EditIcon } from "./edit/index.vue";
+export { default as ArrowLeftIcon } from "./arrow-left/index.vue";
 export { default as PlusCircleIcon } from "./plus-circle/index.vue";
 export { default as SearchIcon } from "./search/index.vue";
 export { default as EllipsisHorizontalIcon } from "./ellipsis-horizontal/index.vue";

@@ -6,13 +6,15 @@ import { Button, Paragraph, Title } from "@clicksign/design-system";
 <template>
   <div class="card">
     <div class="flex">
-      <Title as="h4" :color="'var(--ds-primary-700)'">
+      <Title as="h4" :color="'var(--ds-primary-800)'">
         Nenhum projeto
       </Title>
       <Paragraph>Clique no botão abaixo para criar o primeiro e gerenciá-lo.</Paragraph>
-      <Button class="mt-4">
-        Novo projeto
-      </Button>
+      <NuxtLink to="/add">
+        <Button class="mt-4">
+          Novo projeto
+        </Button>
+      </NuxtLink>
     </div>
   </div>
 </template>
@@ -24,7 +26,7 @@ import { Button, Paragraph, Title } from "@clicksign/design-system";
   justify-content: center;
   height: calc(100vh - 200px);
   background: white;
-  border-radius: 4px;
+  border-radius: var(--ds-radius-4);
 
   @media (max-width: 768px) {
     height: calc(100vh - 164px);

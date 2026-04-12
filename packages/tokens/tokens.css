@@ -17,6 +17,7 @@
 
   --ds-primary-400: #b2a8ff;
   --ds-primary-700: #695ccd;
+  --ds-primary-800: #1f1283;
 
   --ds-neutral-0: #fff;
   --ds-neutral-200: #dcdcdc;
@@ -24,6 +25,8 @@
   --ds-neutral-900: #1c1930;
   --ds-neutral-950: #000;
 
+  --ds-radius-4: 4px;
+  --ds-radius-8: 8px;
   --ds-radius-sm: 16px;
   --ds-radius-lg: 26px;
 

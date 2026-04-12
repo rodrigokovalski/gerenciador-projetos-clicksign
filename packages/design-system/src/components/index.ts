@@ -1,6 +1,9 @@
 export { default as Button } from "./Button/Button.vue";
 export { default as Card } from "./Card/Card.vue";
+export { default as FileInput } from "./InputFile/FileInput.vue";
 export { default as Header } from "./Header/Header.vue";
+export { default as Input } from "./Input/Input.vue";
+export { default as Label } from "./Label/Label.vue";
 export { default as Paragraph } from "./Typography/Paragraph/Paragraph.vue";
 export { default as Span } from "./Typography/Span/Span.vue";
 export { default as Title } from "./Typography/Title/Title.vue";
