@@ -11,8 +11,8 @@ describe("InputFile", () => {
       },
     });
 
-    expect(wrapper.find("[data-testid=\"ds-file-input\"]").exists()).toBe(true);
-    expect(wrapper.find("[data-testid=\"ds-file-input-native\"]").exists()).toBe(true);
+    expect(wrapper.find("[data-testid=\"ds-input-file\"]").exists()).toBe(true);
+    expect(wrapper.find("[data-testid=\"ds-input-file-native\"]").exists()).toBe(true);
     expect(wrapper.text()).toContain("Texto de apoio");
     expect(wrapper.text()).toContain("Selecionar arquivo");
   });

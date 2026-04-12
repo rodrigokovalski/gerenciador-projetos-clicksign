@@ -22,28 +22,46 @@ import { ArrowLeftIcon } from "@clicksign/icons";
         <div class="form">
           <form action="">
             <div class="form-group">
-              <Label for="name">Nome do projeto</Label>
-              <Input type="text" id="name" name="name" />
+              <Label class="label" for="name">Nome do projeto <Span class="span">(Obrigatório)</Span></Label>
+              <Input
+                id="name"
+                type="text"
+                name="name"
+              />
             </div>
             <div class="form-group">
-              <Label for="client">Cliente</Label>
-              <Input type="text" id="client" name="client" />
+              <Label class="label" for="client">Cliente <Span class="span">(Obrigatório)</Span></Label>
+              <Input
+                id="client"
+                type="text"
+                name="client"
+              />
             </div>
             <div class="flex">
               <div class="form-group">
-                <Label for="client">Data de início</Label>
-                <Input type="date" id="client" name="client" />
+                <Label class="label" for="client">Data de início <Span class="span">(Obrigatório)</Span></Label>
+                <Input
+                  id="client"
+                  type="date"
+                  name="client"
+                />
               </div>
               <div class="form-group">
-                <Label for="client">Data final</Label>
-                <Input type="date" id="client" name="client" />
+                <Label class="label" for="client">Data final <Span class="span">(Obrigatório)</Span></Label>
+                <Input
+                  id="client"
+                  type="date"
+                  name="client"
+                />
               </div>
             </div>
             <div class="form-group">
-              <Label for="client">Cliente</Label>
-              <InputFile class="input-file"/>
+              <Label class="label" for="client">Cliente <Span class="span">(Obrigatório)</Span></Label>
+              <InputFile class="input-file" />
             </div>
-            <Button type="submit" class="button">Salvar projeto</Button>
+            <Button type="submit" class="button">
+              Salvar projeto
+            </Button>
           </form>
         </div>
       </Card>
@@ -62,6 +80,10 @@ import { ArrowLeftIcon } from "@clicksign/icons";
   padding: 52px;
   background: transparent;
   border-radius: var(--ds-radius-8);
+
+  @media (max-width: 768px) {
+    padding: 24px;
+  }
 }
 .link-container {
 width: fit-content;
@@ -87,11 +109,23 @@ width: fit-content;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
 }
 .input-file {
   background-color: transparent !important;
 }
 .button {
   width: 100%;
+}
+.label {
+  color: var(--ds-primary-700);
+}
+.span {
+  color: var(--ds-neutral-500);
+  font-weight: var(--ds-font-weight-regular);
+  margin-left: 8px;
 }
 </style>
