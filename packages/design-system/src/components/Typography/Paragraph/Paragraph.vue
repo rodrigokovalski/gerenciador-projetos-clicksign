@@ -7,7 +7,6 @@ withDefaults(
   }>(),
   {
     size: "md",
-    color: "#717171",
     weight: "normal",
   },
 );
@@ -18,7 +17,7 @@ withDefaults(
     class="ds-paragraph"
     :class="[`ds-paragraph--${size}`, `ds-paragraph--${weight}`]"
     :data-size="size"
-    :style="{ color }"
+    :style="color ? { color } : undefined"
     data-testid="ds-paragraph"
   >
     <slot />
@@ -28,27 +27,29 @@ withDefaults(
 <style scoped>
 .ds-paragraph {
   margin: 0;
-  line-height: 1.5;
+  line-height: var(--ds-line-height-normal);
+  color: var(--ds-neutral-500);
+  font-family: inherit;
 }
 
 .ds-paragraph--sm {
-  font-size: 14px;
+  font-size: var(--ds-font-size-sm);
 }
 
 .ds-paragraph--md {
-  font-size: 16px;
+  font-size: var(--ds-font-size-md);
 }
 
 .ds-paragraph--lg {
-  font-size: 18px;
+  font-size: var(--ds-font-size-lg);
 }
 
 .ds-paragraph--normal {
-  font-weight: 400;
+  font-weight: var(--ds-font-weight-regular);
 }
 
 .ds-paragraph--bold {
-  font-weight: 700;
+  font-weight: var(--ds-font-weight-bold);
 }
 
 </style>

@@ -1,0 +1,11 @@
+{
+  "name": "@clicksign/icons",
+  "version": "0.0.0",
+  "private": true,
+  "peerDependencies": {
+    "vue": "^3.5"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}

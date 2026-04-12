@@ -1,0 +1,31 @@
+:root {
+  --ds-font-family-sans: "Encode Sans Semi Expanded", system-ui, sans-serif;
+
+  --ds-font-size-sm: 14px;
+  --ds-font-size-md: 16px;
+  --ds-font-size-lg: 18px;
+  --ds-font-size-xl: 20px;
+  --ds-font-size-2xl: 24px;
+  --ds-font-size-3xl: 32px;
+
+  --ds-line-height-tight: 1.25;
+  --ds-line-height-normal: 1.5;
+
+  --ds-font-weight-regular: 400;
+  --ds-font-weight-semibold: 600;
+  --ds-font-weight-bold: 700;
+
+  --ds-primary-400: #b2a8ff;
+  --ds-primary-700: #695ccd;
+
+  --ds-neutral-0: #fff;
+  --ds-neutral-200: #dcdcdc;
+  --ds-neutral-500: #717171;
+  --ds-neutral-900: #1c1930;
+  --ds-neutral-950: #000;
+
+  --ds-radius-sm: 16px;
+  --ds-radius-lg: 26px;
+
+  --ds-shadow-md: 0 4px 4px 0 rgb(0 0 0 / 25%);
+}

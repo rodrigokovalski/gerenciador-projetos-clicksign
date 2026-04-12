@@ -1,0 +1,8 @@
+@import url("https://fonts.googleapis.com/css2?family=Encode+Sans+Semi+Expanded:wght@400;600;700&display=swap");
+
+@import "./tokens.css";
+
+html,
+body {
+  font-family: var(--ds-font-family-sans);
+}

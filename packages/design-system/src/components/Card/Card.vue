@@ -6,8 +6,8 @@
 
 <style scoped>
 .ds-card {
-  background: #fff;
-  border-radius: 16px;
-  border: 1px solid #DCDCDC;
+  background: var(--ds-neutral-0);
+  border-radius: var(--ds-radius-sm);
+  border: 1px solid var(--ds-neutral-200);
 }
 </style>

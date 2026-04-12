@@ -1,18 +1,13 @@
 <script setup lang="ts">
-withDefaults(
-  defineProps<{
-    color?: string;
-  }>(),
-  {
-    color: "#717171",
-  },
-);
+defineProps<{
+  color?: string;
+}>();
 </script>
 
 <template>
   <span
     class="ds-span"
-    :style="{ color }"
+    :style="color ? { color } : undefined"
     data-testid="ds-span"
   >
     <slot />
@@ -22,5 +17,6 @@ withDefaults(
 <style scoped>
 .ds-span {
   font: inherit;
+  color: var(--ds-neutral-500);
 }
 </style>

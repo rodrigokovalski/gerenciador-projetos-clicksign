@@ -6,7 +6,6 @@ withDefaults(
   }>(),
   {
     as: "h1",
-    color: "#717171",
   },
 );
 </script>
@@ -17,7 +16,7 @@ withDefaults(
     class="ds-title"
     :class="[`ds-title--${as}`]"
     :data-as="as"
-    :style="{ color }"
+    :style="color ? { color } : undefined"
     data-testid="ds-title"
   >
     <slot />
@@ -27,23 +26,25 @@ withDefaults(
 <style scoped>
 .ds-title {
   margin: 0;
-  font-weight: 600;
-  line-height: 1.25;
+  font-weight: var(--ds-font-weight-semibold);
+  line-height: var(--ds-line-height-tight);
+  color: var(--ds-neutral-500);
+  font-family: inherit;
 }
 
 .ds-title--h1 {
-  font-size: 32px;
+  font-size: var(--ds-font-size-3xl);
 }
 
 .ds-title--h2 {
-  font-size: 24px;
+  font-size: var(--ds-font-size-2xl);
 }
 
 .ds-title--h3 {
-  font-size: 20px;
+  font-size: var(--ds-font-size-xl);
 }
 
 .ds-title--h4 {
-  font-size: 18px;
+  font-size: var(--ds-font-size-lg);
 }
 </style>

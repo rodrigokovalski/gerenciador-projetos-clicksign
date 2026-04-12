@@ -1,5 +1,7 @@
 import type { Preview } from "@storybook/vue3-vite";
 
+import "@clicksign/tokens/theme.css";
+
 const preview: Preview = {
   parameters: {
     controls: {

@@ -27,23 +27,23 @@ withDefaults(
 <style scoped>
 .ds-button {
   cursor: pointer;
-  border-radius: 26px;
+  border-radius: var(--ds-radius-lg);
   padding: 14px 32px;
   border: 1px solid transparent;
 }
 
 .ds-button--primary {
-  background: #695CCD;
-  color: #fff;
+  background: var(--ds-primary-700);
+  color: var(--ds-neutral-0);
 
   &[disabled] {
-    background: #B2A8FF;
+    background: var(--ds-primary-400);
   }
 }
 .ds-button--outlined {
-  background: #fff;
-  border-color: #695CCD;
-  color: #695CCD;
+  background: var(--ds-neutral-0);
+  border-color: var(--ds-primary-700);
+  color: var(--ds-primary-700);
 
   &[disabled] {
     opacity: 0.5;

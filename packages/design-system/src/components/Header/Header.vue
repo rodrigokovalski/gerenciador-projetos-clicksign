@@ -11,8 +11,8 @@
   left: 0;
   right: 0;
   height: 80px;
-  background: #1C1930;
-  border-bottom: 1px solid #000;
-  box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  background: var(--ds-neutral-900);
+  border-bottom: 1px solid var(--ds-neutral-950);
+  box-shadow: var(--ds-shadow-md);
 }
 </style>

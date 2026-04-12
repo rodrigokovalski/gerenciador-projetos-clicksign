@@ -1,0 +1,10 @@
+export { default as TrashIcon } from "./trash/index.vue";
+export { default as EditIcon } from "./edit/index.vue";
+export { default as PlusCircleIcon } from "./plus-circle/index.vue";
+export { default as SearchIcon } from "./search/index.vue";
+export { default as EllipsisHorizontalIcon } from "./ellipsis-horizontal/index.vue";
+export { default as StarOutlinedIcon } from "./star-outlined/index.vue";
+export { default as CalendarDayLightIcon } from "./calendar-day-light/index.vue";
+export { default as CalendarCheckLightIcon } from "./calendar-check-light/index.vue";
+export { default as UploadLightIcon } from "./upload-light/index.vue";
+export { default as HistoryIcon } from "./history/index.vue";
