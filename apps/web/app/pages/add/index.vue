@@ -39,19 +39,19 @@ import { ArrowLeftIcon } from "@clicksign/icons";
             </div>
             <div class="flex">
               <div class="form-group">
-                <Label class="label" for="client">Data de início <Span class="span">(Obrigatório)</Span></Label>
+                <Label class="label" for="data-inicio">Data de início <Span class="span">(Obrigatório)</Span></Label>
                 <Input
-                  id="client"
+                  id="data-inicio"
                   type="date"
-                  name="client"
+                  name="data-inicio"
                 />
               </div>
               <div class="form-group">
-                <Label class="label" for="client">Data final <Span class="span">(Obrigatório)</Span></Label>
+                <Label class="label" for="data-fim">Data final <Span class="span">(Obrigatório)</Span></Label>
                 <Input
-                  id="client"
+                  id="data-fim"
                   type="date"
-                  name="client"
+                  name="data-fim"
                 />
               </div>
             </div>

@@ -49,6 +49,7 @@ function onInput(event: Event) {
 .ds-input {
   box-sizing: border-box;
   width: 100%;
+  min-width: 0px;
   margin: 0;
   padding: 8px 16px;
   border: 1px solid var(--ds-neutral-500);
