@@ -8,6 +8,7 @@ withDefaults(
   {
     size: "md",
     weight: "normal",
+    color: undefined,
   },
 );
 </script>

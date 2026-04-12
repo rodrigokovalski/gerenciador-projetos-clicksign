@@ -34,13 +34,8 @@ export default tseslint.config(
     },
   },
   {
-    files: ["packages/design-system/**/*.vue"],
     rules: {
       "vue/multi-word-component-names": "off",
-    },
-  },
-  {
-    rules: {
       "vue/max-attributes-per-line": [
         "error",
         {

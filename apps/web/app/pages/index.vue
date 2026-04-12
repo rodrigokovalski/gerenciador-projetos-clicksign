@@ -25,6 +25,13 @@ import { Button, Paragraph, Title } from "@clicksign/design-system";
   height: calc(100vh - 200px);
   background: white;
   border-radius: 4px;
+
+  @media (max-width: 768px) {
+    height: calc(100vh - 164px);
+  }
+  @media (max-width: 480px) {
+    height: calc(100vh - 128px);
+  }
 }
 .flex {
   display: flex;

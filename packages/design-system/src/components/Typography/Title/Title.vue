@@ -6,6 +6,7 @@ withDefaults(
   }>(),
   {
     as: "h1",
+    color: undefined,
   },
 );
 </script>
