@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Button, Paragraph, Select, Title, Toggle } from "@clicksign/design-system";
-import { PlusCircleIcon } from "@clicksign/icons";
+import { ArrowLeftIcon, PlusCircleIcon } from "@clicksign/icons";
 
 type Project = {
   id: number;
@@ -20,11 +20,29 @@ const { data: projects } = await useFetch<Project[]>("http://localhost:3001/api/
 
 const onlyFavorites = ref(false);
 const sortBy = ref<SortKey>("alphabetical");
+const searchFilter = useState<string>("projects-search-filter", () => "");
+const searchDraft = useState<string>("projects-search-query", () => "");
+
+const hasSearchFilter = computed(() => searchFilter.value.trim().length > 0);
+
+function clearSearch() {
+  searchFilter.value = "";
+  searchDraft.value = "";
+}
 
 const displayedProjects = computed(() => {
   let list = [...(projects.value ?? [])];
   if (onlyFavorites.value)
     list = list.filter(p => p.favorite);
+
+  const q = searchFilter.value.trim().toLowerCase();
+  if (q) {
+    list = list.filter(
+      p =>
+        p.name.toLowerCase().includes(q)
+        || p.client.toLowerCase().includes(q),
+    );
+  }
 
   if (sortBy.value === "alphabetical") {
     list.sort((a, b) => a.name.localeCompare(b.name, "pt-BR", { sensitivity: "base" }));
@@ -64,7 +82,25 @@ function toggleProjectFavorite(id: number) {
 <template>
   <div>
     <div v-if="projects.length" class="header">
-      <Title as="h2" :color="'var(--ds-primary-800)'">
+      <div v-if="hasSearchFilter" class="header__search-head">
+        <button
+          type="button"
+          class="header__back-search"
+          aria-label="Voltar e limpar busca"
+          @click="clearSearch"
+        >
+          <ArrowLeftIcon class="header__back-search-icon" aria-hidden="true" />
+          Voltar
+        </button>
+        <Title as="h2" :color="'var(--ds-primary-800)'">
+          Resultados da busca
+        </Title>
+      </div>
+      <Title
+        v-else
+        as="h2"
+        :color="'var(--ds-primary-800)'"
+      >
         Projetos ({{ displayedProjects.length
         }}<template v-if="onlyFavorites && displayedProjects.length !== projects.length">
           de {{ projects.length }}
@@ -122,7 +158,10 @@ function toggleProjectFavorite(id: number) {
         <Title as="h4" :color="'var(--ds-primary-800)'">
           Nenhum projeto nesta visualização
         </Title>
-        <Paragraph>
+        <Paragraph v-if="hasSearchFilter">
+          Nenhum projeto corresponde à busca. Ajuste o termo ou use Enter no campo de busca do cabeçalho.
+        </Paragraph>
+        <Paragraph v-else>
           Desligue “Apenas favoritos” ou favorite um projeto para vê-lo aqui.
         </Paragraph>
       </div>
@@ -168,6 +207,45 @@ function toggleProjectFavorite(id: number) {
 
 .header__new {
   flex-shrink: 0;
+}
+
+.header__search-head {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 0;
+}
+
+.header__back-search {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  padding: 6px 10px 6px 6px;
+  border: 1px solid var(--ds-neutral-400);
+  border-radius: var(--ds-radius-4);
+  background: var(--ds-neutral-0);
+  font-family: inherit;
+  font-size: var(--ds-font-size-md);
+  font-weight: var(--ds-font-weight-regular);
+  line-height: var(--ds-line-height-normal);
+  color: var(--ds-neutral-800);
+  cursor: pointer;
+}
+
+.header__back-search:hover {
+  background: var(--ds-neutral-200);
+}
+
+.header__back-search:focus-visible {
+  outline: 2px solid var(--ds-primary-700);
+  outline-offset: 2px;
+}
+
+.header__back-search-icon {
+  flex-shrink: 0;
+  color: var(--ds-neutral-700);
 }
 .button {
   display: flex;
