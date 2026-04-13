@@ -109,4 +109,5 @@ const props = withDefaults(
   font-size: var(--ds-font-size-sm);
   color: var(--ds-error-600);
 }
+
 </style>

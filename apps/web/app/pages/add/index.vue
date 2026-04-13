@@ -34,9 +34,20 @@ const { handleSubmit, errors, values, setFieldValue } = useForm({
   },
 });
 
-const onSubmit = handleSubmit((values) => {
-  // eslint-disable-next-line no-console -- feedback do envio no demo
-  console.log(values);
+const onSubmit = handleSubmit(async (values) => {
+  const formData = new FormData();
+  formData.append("project[name]", values.name);
+  formData.append("project[client]", values.client);
+  formData.append("project[start_date]", new Date(values.dataInicio).toISOString());
+  formData.append("project[end_date]", new Date(values.dataFim).toISOString());
+  if (values.coverImage && values.coverImage.length > 0) {
+    formData.append("project[image]", values.coverImage[0] as Blob);
+  }
+  const response = await $fetch("http://localhost:3001/api/projects", { method: "POST", body: formData });
+  
+  console.log(response);
+
+  navigateTo("/");
 });
 
 </script>

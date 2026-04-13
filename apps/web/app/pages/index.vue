@@ -1,25 +1,73 @@
 <script setup lang="ts">
 import { Button, Paragraph, Title } from "@clicksign/design-system";
+import { PlusCircleIcon } from "@clicksign/icons";
 
+type Project = {
+  id: number;
+  name: string;
+  client: string;
+  start_date: string;
+  end_date: string;
+  image_url?: string | null;
+};
+
+const { data: projects } = await useFetch<Project[]>("http://localhost:3001/api/projects", {
+  default: () => [],
+});
 </script>
 
 <template>
-  <div class="card">
-    <div class="flex">
-      <Title as="h4" :color="'var(--ds-primary-800)'">
-        Nenhum projeto
-      </Title>
-      <Paragraph>Clique no botão abaixo para criar o primeiro e gerenciá-lo.</Paragraph>
+  <div>
+    <div class="header">
+      <Title as="h2" :color="'var(--ds-primary-800)'">Projetos ({{ projects.length }})</Title>
       <NuxtLink to="/add">
-        <Button class="mt-4">
+        <Button>
+          <PlusCircleIcon />
           Novo projeto
         </Button>
       </NuxtLink>
+    </div>
+    <div v-if="!projects.length" class="card">
+      <div class="flex">
+        <Title as="h4" :color="'var(--ds-primary-800)'">
+          Nenhum projeto
+        </Title>
+        <Paragraph>Clique no botão abaixo para criar o primeiro e gerenciá-lo.</Paragraph>
+        <NuxtLink to="/add">
+          <Button class="mt-4">
+            <PlusCircleIcon />
+            Novo projeto
+          </Button>
+        </NuxtLink>
+      </div>
+    </div>
+    <div v-else class="project-grid">
+      <ProjectCard
+        v-for="project in projects"
+        :key="project.id"
+        :name="project.name"
+        :client="project.client"
+        :start-date="project.start_date"
+        :end-date="project.end_date"
+        :image-url="project.image_url || '/project-card-placeholder.png'"
+      />
     </div>
   </div>
 </template>
 
 <style scoped>
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 32px;
+  gap: 16px
+}
+.button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
 .card {
   display: flex;
   align-items: center;
@@ -46,5 +94,10 @@ import { Button, Paragraph, Title } from "@clicksign/design-system";
 }
 .mt-4 {
   margin-top: 16px;
+}
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(346px, 1fr));
+  gap: 24px;
 }
 </style>
