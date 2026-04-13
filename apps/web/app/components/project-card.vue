@@ -1,23 +1,63 @@
 <script setup lang="ts">
-import { Card, Paragraph, Title } from "@clicksign/design-system";
-import { CalendarCheckLightIcon, CalendarDayLightIcon } from "@clicksign/icons";
+import { Button, Card, Paragraph, Title } from "@clicksign/design-system";
+import { CalendarCheckLightIcon, CalendarDayLightIcon, EditIcon, StarOutlinedIcon, TrashIcon } from "@clicksign/icons";
 
-defineProps<{
+const props = defineProps<{
+  id: number;
   name: string;
   client: string;
   startDate: string;
   endDate: string;
+  favorite: boolean;
   imageUrl?: string | null;
+}>();
+
+const emit = defineEmits<{
+  deleted: [];
+  updated: [];
 }>();
 
 const titleColor = "var(--ds-primary-800)";
 const metaColor = "var(--ds-neutral-600)";
+
+const pendingDelete = ref(false);
+const pendingFavorite = ref(false);
 
 function formatDateDisplay(value: string) {
   const d = new Date(value);
   if (Number.isNaN(d.getTime()))
     return value;
   return d.toLocaleDateString("pt-BR");
+}
+
+async function onRemove() {
+  if (pendingDelete.value)
+    return;
+  pendingDelete.value = true;
+  try {
+    await $fetch(`http://localhost:3001/api/projects/${props.id}`, { method: "DELETE" });
+    emit("deleted");
+  }
+  finally {
+    pendingDelete.value = false;
+  }
+}
+
+async function onToggleFavorite() {
+  if (pendingFavorite.value)
+    return;
+  pendingFavorite.value = true;
+  try {
+    await $fetch(`http://localhost:3001/api/projects/${props.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: { project: { favorite: !props.favorite } },
+    });
+    emit("updated");
+  }
+  finally {
+    pendingFavorite.value = false;
+  }
 }
 </script>
 
@@ -45,20 +85,30 @@ function formatDateDisplay(value: string) {
         <Paragraph size="sm" :color="metaColor">
           <CalendarCheckLightIcon /> Término: {{ formatDateDisplay(endDate) }}
         </Paragraph>
-        <NuxtLink>
-          <Button>
-            <PencilIcon />
-            Editar
+        <div class="project-card__actions">
+          <NuxtLink :to="`/edit/${id}`" class="project-card__link">
+            <Button type="button">
+              <EditIcon />
+              Editar
+            </Button>
+          </NuxtLink>
+          <Button
+            type="button"
+            :disabled="pendingDelete"
+            @click="onRemove"
+          >
+            <TrashIcon />
+            Remover
           </Button>
-        </NuxtLink>
-        <Button>
-          <TrashIcon />
-          Remover
-        </Button>
-        <Button>
-          <StarIcon />
-          Favoritar
-        </Button>
+          <Button
+            type="button"
+            :disabled="pendingFavorite"
+            @click="onToggleFavorite"
+          >
+            <StarOutlinedIcon />
+            {{ favorite ? "Desfavoritar" : "Favoritar" }}
+          </Button>
+        </div>
       </div>
     </div>
   </Card>
@@ -104,6 +154,18 @@ function formatDateDisplay(value: string) {
     align-items: center;
     gap: 16px;
   }
+}
+
+.project-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.project-card__link {
+  text-decoration: none;
+  color: inherit;
 }
 
 .project-card__divider {

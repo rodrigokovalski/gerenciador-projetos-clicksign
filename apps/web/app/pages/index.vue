@@ -8,6 +8,7 @@ type Project = {
   client: string;
   start_date: string;
   end_date: string;
+  favorite: boolean;
   image_url?: string | null;
 };
 
@@ -19,7 +20,9 @@ const { data: projects } = await useFetch<Project[]>("http://localhost:3001/api/
 <template>
   <div>
     <div class="header">
-      <Title as="h2" :color="'var(--ds-primary-800)'">Projetos ({{ projects.length }})</Title>
+      <Title as="h2" :color="'var(--ds-primary-800)'">
+        Projetos ({{ projects.length }})
+      </Title>
       <NuxtLink to="/add">
         <Button>
           <PlusCircleIcon />
@@ -44,12 +47,16 @@ const { data: projects } = await useFetch<Project[]>("http://localhost:3001/api/
     <div v-else class="project-grid">
       <ProjectCard
         v-for="project in projects"
+        :id="project.id"
         :key="project.id"
         :name="project.name"
         :client="project.client"
         :start-date="project.start_date"
         :end-date="project.end_date"
+        :favorite="project.favorite"
         :image-url="project.image_url || '/project-card-placeholder.png'"
+        @deleted="refresh"
+        @updated="refresh"
       />
     </div>
   </div>
