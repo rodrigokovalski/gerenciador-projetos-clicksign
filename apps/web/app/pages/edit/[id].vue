@@ -29,7 +29,7 @@ const route = useRoute();
 const projectId = computed(() => String(route.params.id));
 
 const { data: project, error } = await useFetch<Project>(
-  () => `http://localhost:3001/api/projects/${projectId.value}`,
+  () => `http://localhost:3001/api/v1/projects/${projectId.value}`,
   { key: () => `project-edit-${projectId.value}` },
 );
 
@@ -125,7 +125,7 @@ const onSubmit = handleSubmit(async (formValues) => {
   else if (currentCoverDismissed.value) {
     formData.append("project[remove_image]", "true");
   }
-  await $fetch(`http://localhost:3001/api/projects/${projectId.value}`, {
+  await $fetch(`http://localhost:3001/api/v1/projects/${projectId.value}`, {
     method: "PATCH",
     body: formData,
   });

@@ -72,7 +72,7 @@ const onSubmit = handleSubmit(async (values) => {
   if (values.coverImage && values.coverImage.length > 0) {
     formData.append("project[image]", values.coverImage[0] as Blob);
   }
-  const response = await $fetch("http://localhost:3001/api/projects", { method: "POST", body: formData });
+  const response = await $fetch("http://localhost:3001/api/v1/projects", { method: "POST", body: formData });
 
   console.log(response);
 

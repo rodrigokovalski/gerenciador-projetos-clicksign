@@ -14,7 +14,7 @@ type Project = {
 
 type SortKey = "alphabetical" | "start_recent" | "deadline_soon";
 
-const { data: projects } = await useFetch<Project[]>("http://localhost:3001/api/projects", {
+const { data: projects } = await useFetch<Project[]>("http://localhost:3001/api/v1/projects", {
   default: () => [],
 });
 

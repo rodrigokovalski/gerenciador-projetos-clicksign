@@ -67,7 +67,7 @@ async function confirmDelete() {
     return;
   pendingDelete.value = true;
   try {
-    await $fetch(`http://localhost:3001/api/projects/${props.id}`, { method: "DELETE" });
+    await $fetch(`http://localhost:3001/api/v1/projects/${props.id}`, { method: "DELETE" });
     emit("deleted");
     deleteModalOpen.value = false;
   }
@@ -86,7 +86,7 @@ async function onToggleFavorite() {
     return;
   pendingFavorite.value = true;
   try {
-    await $fetch(`http://localhost:3001/api/projects/${props.id}`, {
+    await $fetch(`http://localhost:3001/api/v1/projects/${props.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: { project: { favorite: !props.favorite } },
