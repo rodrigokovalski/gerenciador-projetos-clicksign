@@ -8,6 +8,7 @@ export { default as Input } from "./Input/Input.vue";
 export { default as Label } from "./Label/Label.vue";
 export { default as Modal } from "./Modal/Modal.vue";
 export { default as Paragraph } from "./Typography/Paragraph/Paragraph.vue";
+export { default as Search } from "./Search/Search.vue";
 export { default as Select } from "./Select/Select.vue";
 export { default as Span } from "./Typography/Span/Span.vue";
 export { default as Title } from "./Typography/Title/Title.vue";
