@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useTemplateRef } from "vue";
+import { useTemplateRef, watch } from "vue";
 
 import { UploadLightIcon } from "@clicksign/icons";
 
@@ -8,6 +8,7 @@ import Paragraph from "../Typography/Paragraph/Paragraph.vue";
 
 const props = withDefaults(
   defineProps<{
+    modelValue?: File[];
     buttonText?: string;
     accept?: string;
     multiple?: boolean;
@@ -16,6 +17,7 @@ const props = withDefaults(
     inputId?: string;
   }>(),
   {
+    modelValue: () => [],
     buttonText: "Selecionar arquivo",
     disabled: false,
     accept: undefined,
@@ -30,6 +32,15 @@ const emit = defineEmits<{
 }>();
 
 const fileInputRef = useTemplateRef<HTMLInputElement>("fileInput");
+
+watch(
+  () => props.modelValue,
+  (files) => {
+    if (files.length === 0 && fileInputRef.value) {
+      fileInputRef.value.value = "";
+    }
+  },
+);
 
 function openFilePicker() {
   if (props.disabled) {
@@ -129,8 +140,4 @@ function onFileChange(event: Event) {
   color: var(--ds-primary-700);
 }
 
-.ds-input-file__body :deep(.ds-input-file__text) {
-  max-width: 280px;
-  text-align: center;
-}
 </style>

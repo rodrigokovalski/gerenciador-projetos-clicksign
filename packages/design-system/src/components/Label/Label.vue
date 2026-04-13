@@ -24,8 +24,7 @@ withDefaults(
   display: inline-block;
   margin: 0;
   font-family: inherit;
-  font-size: var(--ds-font-size-sm);
-  font-weight: var(--ds-font-weight-semibold);
+  font-size: var(--ds-font-size-lg);
   line-height: var(--ds-line-height-normal);
   color: var(--ds-neutral-900);
 }

@@ -1,6 +1,43 @@
 <script setup lang="ts">
-import { Button, Card, Input, InputFile, Label, Span, Title } from "@clicksign/design-system";
+import { Button, Card, InputFile, Label, Span, Title } from "@clicksign/design-system";
 import { ArrowLeftIcon } from "@clicksign/icons";
+import { toTypedSchema } from "@vee-validate/zod";
+import { useForm } from "vee-validate";
+import { z } from "zod";
+
+function wordCount(value: string) {
+  return value.trim().split(/\s+/).filter(Boolean).length;
+}
+
+const validationSchema = toTypedSchema(
+  z.object({
+    name: z.string().refine(value => wordCount(value) >= 2, {
+      message: "Por favor, digite ao menos duas palavras",
+    }),
+    client: z.string().refine(value => wordCount(value) >= 1, {
+      message: "Por favor, digite ao menos uma palavra",
+    }),
+    dataInicio: z.coerce.date({ error: () => "Selecione uma data válida" }),
+    dataFim: z.coerce.date({ error: () => "Selecione uma data válida" }),
+    coverImage: z.array(z.instanceof(File)).optional(),
+  }),
+);
+
+const { handleSubmit, errors, values, setFieldValue } = useForm({
+  validationSchema,
+  initialValues: {
+    name: "",
+    client: "",
+    dataInicio: "",
+    dataFim: "",
+    coverImage: [] as File[],
+  },
+});
+
+const onSubmit = handleSubmit((values) => {
+  // eslint-disable-next-line no-console -- feedback do envio no demo
+  console.log(values);
+});
 
 </script>
 
@@ -20,44 +57,54 @@ import { ArrowLeftIcon } from "@clicksign/icons";
     <div class="content">
       <Card class="card">
         <div class="form">
-          <form action="">
+          <form @submit.prevent="onSubmit">
             <div class="form-group">
-              <Label class="label" for="name">Nome do projeto <Span class="span">(Obrigatório)</Span></Label>
-              <Input
-                id="name"
-                type="text"
+              <FormField
                 name="name"
+                label="Nome do projeto"
+                :error="errors.name"
               />
             </div>
             <div class="form-group">
-              <Label class="label" for="client">Cliente <Span class="span">(Obrigatório)</Span></Label>
-              <Input
-                id="client"
-                type="text"
+              <FormField
                 name="client"
+                label="Cliente"
+                :error="errors.client"
               />
             </div>
             <div class="flex">
               <div class="form-group">
-                <Label class="label" for="data-inicio">Data de início <Span class="span">(Obrigatório)</Span></Label>
-                <Input
-                  id="data-inicio"
+                <FormField
+                  name="dataInicio"
+                  label="Data de início"
                   type="date"
-                  name="data-inicio"
+                  :error="errors.dataInicio"
                 />
               </div>
               <div class="form-group">
-                <Label class="label" for="data-fim">Data final <Span class="span">(Obrigatório)</Span></Label>
-                <Input
-                  id="data-fim"
+                <FormField
+                  name="dataFim"
+                  label="Data final"
                   type="date"
-                  name="data-fim"
+                  :error="errors.dataFim"
                 />
               </div>
             </div>
             <div class="form-group">
-              <Label class="label" for="client">Cliente <Span class="span">(Obrigatório)</Span></Label>
-              <InputFile class="input-file" />
+              <Label class="label" for="project-files">Imagem do projeto</Label>
+              <InputFile
+                input-id="project-files"
+                name="coverImage"
+                accept="image/*"
+                :multiple="false"
+                class="input-file"
+                :model-value="values.coverImage"
+                @update:model-value="files => setFieldValue('coverImage', files)"
+              >
+                <template #description>
+                  Escolha uma imagem .jpg ou .png no seu dispositivo
+                </template>
+              </InputFile>
             </div>
             <Button type="submit" class="button">
               Salvar projeto
