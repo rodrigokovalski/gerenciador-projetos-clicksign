@@ -33,6 +33,8 @@ importers:
         specifier: ^8.58.1
         version: 8.58.1(eslint@10.2.0(jiti@2.6.1))(typescript@5.9.2)
 
+  apps/api: {}
+
   apps/web:
     dependencies:
       '@clicksign/design-system':
