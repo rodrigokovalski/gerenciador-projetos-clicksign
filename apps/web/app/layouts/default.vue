@@ -18,7 +18,7 @@
   display: flex;
   flex-direction: column;
   flex: 1;
-  margin: 60px 42px;
+  margin: 24px 16px;
 
   @media (max-width: 768px) {
     margin: 42px 24px;

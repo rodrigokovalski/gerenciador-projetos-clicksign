@@ -151,15 +151,12 @@ width: fit-content;
   flex-direction: column;
   gap: 8px;
   margin-bottom: 32px;
+  flex: 1;
 }
 .flex {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-  }
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
 }
 .input-file {
   background-color: transparent !important;
