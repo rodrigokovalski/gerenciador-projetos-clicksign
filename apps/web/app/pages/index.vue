@@ -19,7 +19,7 @@ const { data: projects } = await useFetch<Project[]>("http://localhost:3001/api/
 
 <template>
   <div>
-    <div class="header">
+    <div v-if="projects.length" class="header">
       <Title as="h2" :color="'var(--ds-primary-800)'">
         Projetos ({{ projects.length }})
       </Title>
@@ -55,8 +55,8 @@ const { data: projects } = await useFetch<Project[]>("http://localhost:3001/api/
         :end-date="project.end_date"
         :favorite="project.favorite"
         :image-url="project.image_url || '/project-card-placeholder.png'"
-        @deleted="refresh"
-        @updated="refresh"
+        @deleted="() => { projects = projects.filter(p => p.id !== project.id) }"
+        @updated="() => { projects = projects.map(p => (p.id === project.id ? { ...p, favorite: !p.favorite } : p)) }"
       />
     </div>
   </div>
