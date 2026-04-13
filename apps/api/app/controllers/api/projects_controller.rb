@@ -21,7 +21,11 @@ class Api::ProjectsController < ApplicationController
     end
   
     def update
-      if @project.update(project_params)
+      attrs = project_params
+      if ActiveModel::Type::Boolean.new.cast(attrs[:remove_image])
+        @project.image.purge
+      end
+      if @project.update(attrs.except(:remove_image))
         render json: serialize(@project)
       else
         render json: { errors: @project.errors }, status: :unprocessable_entity
@@ -46,7 +50,8 @@ class Api::ProjectsController < ApplicationController
         :start_date,
         :end_date,
         :favorite,
-        :image
+        :image,
+        :remove_image
       )
     end
   

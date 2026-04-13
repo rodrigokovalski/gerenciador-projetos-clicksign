@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Button, Card, InputFile, Label, Span, Title } from "@clicksign/design-system";
-import { ArrowLeftIcon } from "@clicksign/icons";
+import { ArrowLeftIcon, TrashIcon } from "@clicksign/icons";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useForm } from "vee-validate";
 import { z } from "zod";
@@ -67,6 +67,52 @@ const { handleSubmit, errors, values, setFieldValue } = useForm({
   },
 });
 
+const currentCoverDismissed = ref(false);
+const objectPreviewUrl = ref<string | null>(null);
+
+watch(
+  () => values.coverImage,
+  (files) => {
+    if (objectPreviewUrl.value) {
+      URL.revokeObjectURL(objectPreviewUrl.value);
+      objectPreviewUrl.value = null;
+    }
+    const file = files?.[0];
+    if (file) {
+      objectPreviewUrl.value = URL.createObjectURL(file);
+    }
+  },
+  { deep: true },
+);
+
+onUnmounted(() => {
+  if (objectPreviewUrl.value) {
+    URL.revokeObjectURL(objectPreviewUrl.value);
+  }
+});
+
+const coverDisplaySrc = computed(() => {
+  if (objectPreviewUrl.value) {
+    return objectPreviewUrl.value;
+  }
+  if (!currentCoverDismissed.value && project.value?.image_url) {
+    return project.value.image_url;
+  }
+  return "";
+});
+
+const hasCoverPreview = computed(() => Boolean(coverDisplaySrc.value));
+
+function clearCoverImage() {
+  if (values.coverImage?.length) {
+    setFieldValue("coverImage", []);
+    return;
+  }
+  if (project.value?.image_url) {
+    currentCoverDismissed.value = true;
+  }
+}
+
 const onSubmit = handleSubmit(async (formValues) => {
   const formData = new FormData();
   formData.append("project[name]", formValues.name);
@@ -75,6 +121,9 @@ const onSubmit = handleSubmit(async (formValues) => {
   formData.append("project[end_date]", new Date(formValues.dataFim).toISOString());
   if (formValues.coverImage && formValues.coverImage.length > 0) {
     formData.append("project[image]", formValues.coverImage[0] as Blob);
+  }
+  else if (currentCoverDismissed.value) {
+    formData.append("project[remove_image]", "true");
   }
   await $fetch(`http://localhost:3001/api/projects/${projectId.value}`, {
     method: "PATCH",
@@ -102,15 +151,6 @@ const onSubmit = handleSubmit(async (formValues) => {
       <Card class="card">
         <div class="form">
           <form @submit.prevent="onSubmit">
-            <div v-if="project?.image_url && !(values.coverImage?.length)" class="current-image">
-              <Label class="label" for="current-cover">Imagem atual</Label>
-              <img
-                id="current-cover"
-                :src="project.image_url"
-                alt=""
-                class="current-image__img"
-              >
-            </div>
             <div class="form-group">
               <FormField
                 name="name"
@@ -145,7 +185,24 @@ const onSubmit = handleSubmit(async (formValues) => {
             </div>
             <div class="form-group">
               <Label class="label" for="project-files">Imagem do projeto</Label>
+              <div v-if="hasCoverPreview" class="cover-preview">
+                <button
+                  type="button"
+                  class="cover-preview__remove"
+                  aria-label="Remover imagem"
+                  @click="clearCoverImage"
+                >
+                  <TrashIcon />
+                </button>
+                <img
+                  v-if="coverDisplaySrc"
+                  :src="coverDisplaySrc"
+                  alt=""
+                  class="cover-preview__img"
+                >
+              </div>
               <InputFile
+                v-else
                 input-id="project-files"
                 name="coverImage"
                 accept="image/*"
@@ -220,16 +277,40 @@ width: fit-content;
 .label {
   color: var(--ds-primary-700);
 }
-.current-image {
-  margin-bottom: 32px;
-}
-.current-image__img {
-  display: block;
-  margin-top: 8px;
-  max-width: 100%;
-  max-height: 280px;
-  object-fit: contain;
+.cover-preview {
+  position: relative;
+  width: 100%;
+  min-height: 170px;
+  border: 1px dashed var(--ds-neutral-200);
   border-radius: var(--ds-radius-4);
-  border: 1px solid var(--ds-neutral-200);
+  background: var(--ds-neutral-0);
+  box-sizing: border-box;
+}
+.cover-preview__img {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  object-fit: cover;
+  border-radius: var(--ds-radius-4);
+}
+.cover-preview__remove {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  border-radius: var(--ds-radius-4);
+  background: var(--ds-neutral-0);
+  color: var(--ds-primary-700);
+  box-shadow: 0 1px 4px rgb(0 0 0 / 12%);
+  cursor: pointer;
+}
+.cover-preview__remove:hover {
+  color: var(--ds-primary-800);
 }
 </style>
