@@ -1,16 +1,10 @@
 <script setup lang="ts">
 import { Button, InputFile, Label } from "@clicksign/design-system";
 import { CalendarCheckLightIcon, CalendarDayLightIcon, TrashIcon } from "@clicksign/icons";
-
-type FormErrors = {
-  name?: string;
-  client?: string;
-  dataInicio?: string;
-  dataFim?: string;
-};
+import type { FormErrorsType } from "~/pages/projects.types";
 
 defineProps<{
-  errors: FormErrors;
+  errors: FormErrorsType;
   coverImageValue: File[] | undefined;
   hasCoverPreview: boolean;
   coverDisplaySrc: string;
@@ -19,7 +13,7 @@ defineProps<{
 }>();
 
 const emit = defineEmits<{
-  submit: [];
+  "submit": [];
   "clear-cover": [];
   "update:coverImage": [files: File[]];
 }>();
@@ -99,7 +93,11 @@ function onCoverUpdate(files: File[]) {
           </template>
         </InputFile>
       </div>
-      <Button type="submit" class="button" :disabled="Object.keys(errors).length > 0">
+      <Button
+        type="submit"
+        class="button"
+        :disabled="Object.keys(errors).length > 0"
+      >
         {{ submitLabel }}
       </Button>
     </form>

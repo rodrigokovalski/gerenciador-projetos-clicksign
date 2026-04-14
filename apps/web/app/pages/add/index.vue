@@ -3,26 +3,10 @@ import { Card, Span, Title } from "@clicksign/design-system";
 import { ArrowLeftIcon } from "@clicksign/icons";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useForm } from "vee-validate";
-import { z } from "zod";
 import env from "~/lib/env";
+import { projectFormSchema } from "~/lib/zod-schemas";
 
-function wordCount(value: string) {
-  return value.trim().split(/\s+/).filter(Boolean).length;
-}
-
-const validationSchema = toTypedSchema(
-  z.object({
-    name: z.string().refine(value => wordCount(value) >= 2, {
-      message: "Por favor, digite ao menos duas palavras",
-    }),
-    client: z.string().refine(value => wordCount(value) >= 1, {
-      message: "Por favor, digite ao menos uma palavra",
-    }),
-    dataInicio: z.coerce.date({ error: () => "Selecione uma data válida" }),
-    dataFim: z.coerce.date({ error: () => "Selecione uma data válida" }),
-    coverImage: z.array(z.instanceof(File)).optional(),
-  }),
-);
+const validationSchema = toTypedSchema(projectFormSchema);
 
 const { handleSubmit, errors, values, setFieldValue } = useForm({
   validationSchema,
@@ -65,7 +49,6 @@ const coverDisplaySrc = computed(() => objectPreviewUrl.value ?? "");
 function clearCoverImage() {
   setFieldValue("coverImage", []);
 }
-
 
 const onSubmit = handleSubmit(async (formValues) => {
   const formData = new FormData();

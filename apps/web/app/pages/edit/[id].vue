@@ -3,22 +3,9 @@ import { Card, Span, Title } from "@clicksign/design-system";
 import { ArrowLeftIcon } from "@clicksign/icons";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useForm } from "vee-validate";
-import { z } from "zod";
 import env from "~/lib/env";
-
-type Project = {
-  id: number;
-  name: string;
-  client: string;
-  start_date: string;
-  end_date: string;
-  favorite: boolean;
-  image_url?: string | null;
-};
-
-function wordCount(value: string) {
-  return value.trim().split(/\s+/).filter(Boolean).length;
-}
+import { projectFormSchema } from "~/lib/zod-schemas";
+import type { ProjectType } from "../projects.types";
 
 function toDateInputValue(value: string) {
   if (!value)
@@ -29,8 +16,7 @@ function toDateInputValue(value: string) {
 const route = useRoute();
 const projectId = computed(() => String(route.params.id));
 
-
-const { data: project, error } = await useFetch<Project>(
+const { data: project, error } = await useFetch<ProjectType>(
   () => `${env.API_BASE_URL}/api/v1/projects/${projectId.value}`,
   { key: () => `project-edit-${projectId.value}` },
 );
@@ -42,19 +28,7 @@ if (error.value || !project.value) {
   });
 }
 
-const validationSchema = toTypedSchema(
-  z.object({
-    name: z.string().refine(value => wordCount(value) >= 2, {
-      message: "Por favor, digite ao menos duas palavras",
-    }),
-    client: z.string().refine(value => wordCount(value) >= 1, {
-      message: "Por favor, digite ao menos uma palavra",
-    }),
-    dataInicio: z.coerce.date({ error: () => "Selecione uma data válida" }),
-    dataFim: z.coerce.date({ error: () => "Selecione uma data válida" }),
-    coverImage: z.array(z.instanceof(File)).optional(),
-  }),
-);
+const validationSchema = toTypedSchema(projectFormSchema);
 
 const p = project.value;
 

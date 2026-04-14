@@ -31,16 +31,20 @@ const props = withDefaults(
     </legend>
     <Field v-slot="{ field }" :name="props.name">
       <div class="ds-input__container">
-      <input
-        v-bind="field"
-        :id="field.name"
-        :type="props.type"
-        :disabled="props.disabled"
-        :placeholder="props.placeholder"
-        class="ds-input"
-        :class="{ 'ds-input--error': props.error }"
-      >
-        <component :is="props.icon" v-if="props.icon" class="ds-input__icon" />
+        <input
+          v-bind="field"
+          :id="field.name"
+          :type="props.type"
+          :disabled="props.disabled"
+          :placeholder="props.placeholder"
+          class="ds-input"
+          :class="{ 'ds-input--error': props.error }"
+        >
+        <component
+          :is="props.icon"
+          v-if="props.icon"
+          class="ds-input__icon"
+        />
       </div>
     </Field>
     <p v-if="props.error" class="field-error">

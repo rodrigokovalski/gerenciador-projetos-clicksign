@@ -47,7 +47,6 @@ function bumpMenuKey() {
   menuKey.value += 1;
 }
 
-
 function formatDateDisplay(value: string) {
   const d = new Date(value);
   if (Number.isNaN(d.getTime()))

@@ -2,27 +2,12 @@
 import { Button, Paragraph, Select, Title, Toggle } from "@clicksign/design-system";
 import { ArrowLeftIcon, PlusCircleIcon } from "@clicksign/icons";
 import env from "~/lib/env";
+import type { ProjectType, SortKeyType } from "./projects.types";
 
-type Project = {
-  id: number;
-  name: string;
-  client: string;
-  start_date: string;
-  end_date: string;
-  favorite: boolean;
-  image_url?: string | null;
-};
-
-type SortKey = "alphabetical" | "start_recent" | "deadline_soon";
-
-const projectsListUrl = `${env.API_BASE_URL}/api/v1/projects`;
-
-const { data: projects } = await useFetch<Project[]>(projectsListUrl, {
-  default: () => [],
-});
+const { data: projects } = await useFetch<ProjectType[]>(`${env.API_BASE_URL}/api/v1/projects`);
 
 const onlyFavorites = ref(false);
-const sortBy = ref<SortKey>("alphabetical");
+const sortBy = ref<SortKeyType>("alphabetical");
 const searchFilter = useState<string>("projects-search-filter", () => "");
 const searchDraft = useState<string>("projects-search-query", () => "");
 
@@ -69,15 +54,15 @@ function removeProject(id: number) {
   const list = projects.value;
   if (!list)
     return;
-  projects.value = list.filter(p => p.id !== id);
+  projects.value = list.filter(project => project.id !== id);
 }
 
 function toggleProjectFavorite(id: number) {
   const list = projects.value;
   if (!list)
     return;
-  projects.value = list.map(p =>
-    p.id === id ? { ...p, favorite: !p.favorite } : p,
+  projects.value = list.map(project =>
+    project.id === id ? { ...project, favorite: !project.favorite } : project,
   );
 }
 </script>
