@@ -10,3 +10,4 @@ export { default as CalendarDayLightIcon } from "./calendar-day-light/index.vue"
 export { default as CalendarCheckLightIcon } from "./calendar-check-light/index.vue";
 export { default as UploadLightIcon } from "./upload-light/index.vue";
 export { default as HistoryIcon } from "./history/index.vue";
+export { default as ChevronDownLightIcon } from "./chevron-down-light/index.vue";

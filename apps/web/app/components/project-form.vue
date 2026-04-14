@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Button, InputFile, Label } from "@clicksign/design-system";
-import { TrashIcon } from "@clicksign/icons";
+import { CalendarCheckLightIcon, CalendarDayLightIcon, TrashIcon } from "@clicksign/icons";
 
 type FormErrors = {
   name?: string;
@@ -53,6 +53,7 @@ function onCoverUpdate(files: File[]) {
             label="Data de início"
             type="date"
             :error="errors.dataInicio"
+            :icon="CalendarDayLightIcon"
           />
         </div>
         <div class="form-group">
@@ -61,11 +62,12 @@ function onCoverUpdate(files: File[]) {
             label="Data final"
             type="date"
             :error="errors.dataFim"
+            :icon="CalendarCheckLightIcon"
           />
         </div>
       </div>
       <div class="form-group">
-        <Label class="label" for="project-files">Imagem do projeto</Label>
+        <Label class="label" for="project-files">Capa do projeto</Label>
         <div v-if="hasCoverPreview" class="cover-preview">
           <button
             type="button"
@@ -97,7 +99,7 @@ function onCoverUpdate(files: File[]) {
           </template>
         </InputFile>
       </div>
-      <Button type="submit" class="button">
+      <Button type="submit" class="button" :disabled="Object.keys(errors).length > 0">
         {{ submitLabel }}
       </Button>
     </form>

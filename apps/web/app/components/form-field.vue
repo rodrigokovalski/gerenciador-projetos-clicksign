@@ -10,6 +10,7 @@ const props = withDefaults(
     disabled?: boolean;
     placeholder?: string;
     showRequired?: boolean;
+    icon?: Component;
   }>(),
   {
     error: undefined,
@@ -17,6 +18,7 @@ const props = withDefaults(
     disabled: false,
     placeholder: undefined,
     showRequired: true,
+    icon: undefined,
   },
 );
 </script>
@@ -28,6 +30,7 @@ const props = withDefaults(
       <span v-if="props.showRequired" class="hint">(Obrigatório)</span>
     </legend>
     <Field v-slot="{ field }" :name="props.name">
+      <div class="ds-input__container">
       <input
         v-bind="field"
         :id="field.name"
@@ -37,6 +40,8 @@ const props = withDefaults(
         class="ds-input"
         :class="{ 'ds-input--error': props.error }"
       >
+        <component :is="props.icon" v-if="props.icon" class="ds-input__icon" />
+      </div>
     </Field>
     <p v-if="props.error" class="field-error">
       {{ props.error }}
@@ -45,6 +50,19 @@ const props = withDefaults(
 </template>
 
 <style scoped>
+
+.ds-input__container {
+  position: relative;
+}
+
+.ds-input__icon {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--ds-neutral-0);
+}
+
 .fieldset {
   border: none;
   padding: 0;
