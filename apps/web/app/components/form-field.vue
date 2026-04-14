@@ -54,7 +54,6 @@ const props = withDefaults(
 </template>
 
 <style scoped>
-
 .ds-input__container {
   position: relative;
 }
@@ -131,5 +130,4 @@ const props = withDefaults(
   font-size: var(--ds-font-size-sm);
   color: var(--ds-error-600);
 }
-
 </style>

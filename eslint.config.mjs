@@ -16,6 +16,7 @@ export default tseslint.config(
       "**/.turbo/**",
       "**/playwright-report/**",
       "pnpm-lock.yaml",
+      "apps/web/**",
     ],
   },
   eslint.configs.recommended,
