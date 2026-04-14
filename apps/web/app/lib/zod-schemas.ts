@@ -20,7 +20,7 @@ export const projectFormSchema = z.object({
   end_date: dateInputString,
   coverImage: z.array(z.instanceof(File)).optional(),
 })
-.refine(
-  data => new Date(data.end_date) >= new Date(data.start_date),
-  { message: "A data final deve ser igual ou posterior à data de início", path: ["end_date"] },
-);
+  .refine(
+    data => new Date(data.end_date) >= new Date(data.start_date),
+    { message: "A data final deve ser igual ou posterior à data de início", path: ["end_date"] },
+  );

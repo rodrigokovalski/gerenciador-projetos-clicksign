@@ -98,6 +98,7 @@ const onSubmit = handleSubmit(async (formValues) => {
 
     await navigateTo("/");
   }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   catch (e: any) {
     setErrors(e.data.errors);
   }
