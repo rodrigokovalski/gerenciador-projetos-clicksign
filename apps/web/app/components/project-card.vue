@@ -17,9 +17,7 @@ import {
   StarOutlinedIcon,
   TrashIcon,
 } from "@clicksign/icons";
-import { joinURL } from "ufo";
-
-const { public: pub } = useRuntimeConfig();
+import env from "~/lib/env";
 
 const props = defineProps<{
   id: number;
@@ -49,9 +47,6 @@ function bumpMenuKey() {
   menuKey.value += 1;
 }
 
-function projectResourceUrl(id: number) {
-  return joinURL(String(pub.apiBaseUrl ?? "").replace(/\/$/, ""), "/api/v1/projects", String(id));
-}
 
 function formatDateDisplay(value: string) {
   const d = new Date(value);
@@ -74,7 +69,7 @@ async function confirmDelete() {
     return;
   pendingDelete.value = true;
   try {
-    await $fetch(projectResourceUrl(props.id), { method: "DELETE" });
+    await $fetch(`${env.API_BASE_URL}/api/v1/projects/${props.id}`, { method: "DELETE" });
     emit("deleted");
     deleteModalOpen.value = false;
   }
@@ -93,7 +88,7 @@ async function onToggleFavorite() {
     return;
   pendingFavorite.value = true;
   try {
-    await $fetch(projectResourceUrl(props.id), {
+    await $fetch(`${env.API_BASE_URL}/api/v1/projects/${props.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: { project: { favorite: !props.favorite } },

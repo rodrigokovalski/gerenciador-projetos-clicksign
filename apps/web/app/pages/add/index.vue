@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { Card, Span, Title } from "@clicksign/design-system";
 import { ArrowLeftIcon } from "@clicksign/icons";
-import { joinURL } from "ufo";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useForm } from "vee-validate";
 import { z } from "zod";
+import env from "~/lib/env";
 
 function wordCount(value: string) {
   return value.trim().split(/\s+/).filter(Boolean).length;
@@ -66,7 +66,6 @@ function clearCoverImage() {
   setFieldValue("coverImage", []);
 }
 
-const { public: pub } = useRuntimeConfig();
 
 const onSubmit = handleSubmit(async (formValues) => {
   const formData = new FormData();
@@ -77,8 +76,7 @@ const onSubmit = handleSubmit(async (formValues) => {
   if (formValues.coverImage && formValues.coverImage.length > 0) {
     formData.append("project[image]", formValues.coverImage[0] as Blob);
   }
-  const projectsCreateUrl = joinURL(String(pub.apiBaseUrl ?? "").replace(/\/$/, ""), "/api/v1/projects");
-  await $fetch(projectsCreateUrl, { method: "POST", body: formData });
+  await $fetch(`${env.API_BASE_URL}/api/v1/projects`, { method: "POST", body: formData });
 
   navigateTo("/");
 });

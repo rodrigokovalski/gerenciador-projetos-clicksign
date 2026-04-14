@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Button, Paragraph, Select, Title, Toggle } from "@clicksign/design-system";
 import { ArrowLeftIcon, PlusCircleIcon } from "@clicksign/icons";
-import { joinURL } from "ufo";
+import env from "~/lib/env";
 
 type Project = {
   id: number;
@@ -15,8 +15,7 @@ type Project = {
 
 type SortKey = "alphabetical" | "start_recent" | "deadline_soon";
 
-const { public: pub } = useRuntimeConfig();
-const projectsListUrl = joinURL(String(pub.apiBaseUrl ?? "").replace(/\/$/, ""), "/api/v1/projects");
+const projectsListUrl = `${env.API_BASE_URL}/api/v1/projects`;
 
 const { data: projects } = await useFetch<Project[]>(projectsListUrl, {
   default: () => [],

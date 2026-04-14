@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { Card, Span, Title } from "@clicksign/design-system";
 import { ArrowLeftIcon } from "@clicksign/icons";
-import { joinURL } from "ufo";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useForm } from "vee-validate";
 import { z } from "zod";
+import env from "~/lib/env";
 
 type Project = {
   id: number;
@@ -29,15 +29,9 @@ function toDateInputValue(value: string) {
 const route = useRoute();
 const projectId = computed(() => String(route.params.id));
 
-const { public: pub } = useRuntimeConfig();
 
 const { data: project, error } = await useFetch<Project>(
-  () =>
-    joinURL(
-      String(pub.apiBaseUrl ?? "").replace(/\/$/, ""),
-      "/api/v1/projects",
-      projectId.value,
-    ),
+  () => `${env.API_BASE_URL}/api/v1/projects/${projectId.value}`,
   { key: () => `project-edit-${projectId.value}` },
 );
 
@@ -134,7 +128,7 @@ const onSubmit = handleSubmit(async (formValues) => {
     formData.append("project[remove_image]", "true");
   }
   await $fetch(
-    joinURL(String(pub.apiBaseUrl ?? "").replace(/\/$/, ""), "/api/v1/projects", projectId.value),
+    `${env.API_BASE_URL}/api/v1/projects/${projectId.value}`,
     {
       method: "PATCH",
       body: formData,
