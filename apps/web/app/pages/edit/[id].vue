@@ -32,7 +32,7 @@ const validationSchema = toTypedSchema(projectFormSchema);
 
 const p = project.value;
 
-const { handleSubmit, errors, values, setFieldValue } = useForm({
+const { handleSubmit, errors, values, setFieldValue, setErrors } = useForm({
   validationSchema,
   initialValues: {
     name: p.name,
@@ -90,26 +90,31 @@ function clearCoverImage() {
 }
 
 const onSubmit = handleSubmit(async (formValues) => {
-  const formData = new FormData();
-  formData.append("project[name]", formValues.name);
-  formData.append("project[client]", formValues.client);
-  formData.append("project[start_date]", new Date(formValues.start_date).toISOString());
-  formData.append("project[end_date]", new Date(formValues.end_date).toISOString());
-  if (formValues.coverImage && formValues.coverImage.length > 0) {
-    formData.append("project[image]", formValues.coverImage[0] as Blob);
-  }
-  else if (currentCoverDismissed.value) {
-    formData.append("project[remove_image]", "true");
-  }
-  await $fetch(
-    `${env.API_BASE_URL}/api/v1/projects/${projectId.value}`,
-    {
-      method: "PATCH",
-      body: formData,
-    },
-  );
+  try {
+    const formData = new FormData();
+    formData.append("project[name]", formValues.name);
+    formData.append("project[client]", formValues.client);
+    formData.append("project[start_date]", new Date(formValues.start_date).toISOString());
+    formData.append("project[end_date]", new Date(formValues.end_date).toISOString());
+    if (formValues.coverImage && formValues.coverImage.length > 0) {
+      formData.append("project[image]", formValues.coverImage[0] as Blob);
+    }
+    else if (currentCoverDismissed.value) {
+      formData.append("project[remove_image]", "true");
+    }
+    await $fetch(
+      `${env.API_BASE_URL}/api/v1/projects/${projectId.value}`,
+      {
+        method: "PATCH",
+        body: formData,
+      },
+    );
 
-  navigateTo("/");
+    await navigateTo("/");
+  }
+  catch (e: any) {
+    setErrors(e.data.errors);
+  }
 });
 </script>
 

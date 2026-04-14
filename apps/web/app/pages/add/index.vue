@@ -48,7 +48,6 @@ function clearCoverImage() {
   setFieldValue("coverImage", []);
 }
 
-
 const onSubmit = handleSubmit(async (formValues) => {
   try {
     const formData = new FormData();
