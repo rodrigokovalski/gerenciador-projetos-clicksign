@@ -11,7 +11,11 @@ export const projectFormSchema = z.object({
   client: z.string().refine(value => wordCount(value) >= 1, {
     message: "Por favor, digite ao menos uma palavra",
   }),
-  dataInicio: z.coerce.date({ error: () => "Selecione uma data válida" }),
-  dataFim: z.coerce.date({ error: () => "Selecione uma data válida" }),
+  start_date: z.coerce.date({ error: () => "Selecione uma data válida" }),
+  end_date: z.coerce.date({ error: () => "Selecione uma data válida" }),
   coverImage: z.array(z.instanceof(File)).optional(),
-});
+})
+.refine(
+  data => data.end_date >= data.start_date,
+  { message: "A data final deve ser igual ou posterior à data de início", path: ["end_date"] },
+);

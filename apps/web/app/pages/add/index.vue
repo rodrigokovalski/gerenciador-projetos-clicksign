@@ -6,15 +6,13 @@ import { useForm } from "vee-validate";
 import env from "~/lib/env";
 import { projectFormSchema } from "~/lib/zod-schemas";
 
-const validationSchema = toTypedSchema(projectFormSchema);
-
-const { handleSubmit, errors, values, setFieldValue } = useForm({
-  validationSchema,
+const { handleSubmit, errors, values, setFieldValue, setErrors } = useForm({
+  validationSchema: toTypedSchema(projectFormSchema),
   initialValues: {
     name: "",
     client: "",
-    dataInicio: "",
-    dataFim: "",
+    start_date: "",
+    end_date: "",
     coverImage: [] as File[],
   },
 });
@@ -50,18 +48,24 @@ function clearCoverImage() {
   setFieldValue("coverImage", []);
 }
 
-const onSubmit = handleSubmit(async (formValues) => {
-  const formData = new FormData();
-  formData.append("project[name]", formValues.name);
-  formData.append("project[client]", formValues.client);
-  formData.append("project[start_date]", new Date(formValues.dataInicio).toISOString());
-  formData.append("project[end_date]", new Date(formValues.dataFim).toISOString());
-  if (formValues.coverImage && formValues.coverImage.length > 0) {
-    formData.append("project[image]", formValues.coverImage[0] as Blob);
-  }
-  await $fetch(`${env.API_BASE_URL}/api/v1/projects`, { method: "POST", body: formData });
 
-  navigateTo("/");
+const onSubmit = handleSubmit(async (formValues) => {
+  try {
+    const formData = new FormData();
+    formData.append("project[name]", formValues.name);
+    formData.append("project[client]", formValues.client);
+    formData.append("project[start_date]", new Date(formValues.start_date).toISOString());
+    formData.append("project[end_date]", new Date(formValues.end_date).toISOString());
+    if (formValues.coverImage && formValues.coverImage.length > 0) {
+      formData.append("project[image]", formValues.coverImage[0] as Blob);
+    }
+    await $fetch(`${env.API_BASE_URL}/api/v1/projects`, { method: "POST", body: formData });
+
+    await navigateTo("/");
+  }
+  catch (e: any) {
+    setErrors(e.data.errors);
+  }
 });
 </script>
 

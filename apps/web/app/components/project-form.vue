@@ -3,14 +3,18 @@ import { Button, InputFile, Label } from "@clicksign/design-system";
 import { CalendarCheckLightIcon, CalendarDayLightIcon, TrashIcon } from "@clicksign/icons";
 import type { FormErrorsType } from "~/pages/projects.types";
 
-defineProps<{
-  errors: FormErrorsType;
-  coverImageValue: File[] | undefined;
-  hasCoverPreview: boolean;
-  coverDisplaySrc: string;
-  submitLabel: string;
-  imageDescription: string;
-}>();
+withDefaults(
+  defineProps<{
+    errors: FormErrorsType;
+    coverImageValue: File[] | undefined;
+    hasCoverPreview: boolean;
+    coverDisplaySrc: string;
+    submitLabel: string;
+    imageDescription: string;
+    loading?: boolean;
+  }>(),
+  { loading: false },
+);
 
 const emit = defineEmits<{
   "submit": [];
@@ -43,19 +47,19 @@ function onCoverUpdate(files: File[]) {
       <div class="grid">
         <div class="form-group">
           <FormField
-            name="dataInicio"
+            name="start_date"
             label="Data de início"
             type="date"
-            :error="errors.dataInicio"
+            :error="errors.start_date"
             :icon="CalendarDayLightIcon"
           />
         </div>
         <div class="form-group">
           <FormField
-            name="dataFim"
+            name="end_date"
             label="Data final"
             type="date"
-            :error="errors.dataFim"
+            :error="errors.end_date"
             :icon="CalendarCheckLightIcon"
           />
         </div>
@@ -96,9 +100,9 @@ function onCoverUpdate(files: File[]) {
       <Button
         type="submit"
         class="button"
-        :disabled="Object.keys(errors).length > 0"
+        :disabled="loading || Object.keys(errors).length > 0"
       >
-        {{ submitLabel }}
+        {{ loading ? "Salvando…" : submitLabel }}
       </Button>
     </form>
   </div>

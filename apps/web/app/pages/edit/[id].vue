@@ -37,8 +37,8 @@ const { handleSubmit, errors, values, setFieldValue } = useForm({
   initialValues: {
     name: p.name,
     client: p.client,
-    dataInicio: toDateInputValue(p.start_date),
-    dataFim: toDateInputValue(p.end_date),
+    start_date: toDateInputValue(p.start_date),
+    end_date: toDateInputValue(p.end_date),
     coverImage: [] as File[],
   },
 });
@@ -93,8 +93,8 @@ const onSubmit = handleSubmit(async (formValues) => {
   const formData = new FormData();
   formData.append("project[name]", formValues.name);
   formData.append("project[client]", formValues.client);
-  formData.append("project[start_date]", new Date(formValues.dataInicio).toISOString());
-  formData.append("project[end_date]", new Date(formValues.dataFim).toISOString());
+  formData.append("project[start_date]", new Date(formValues.start_date).toISOString());
+  formData.append("project[end_date]", new Date(formValues.end_date).toISOString());
   if (formValues.coverImage && formValues.coverImage.length > 0) {
     formData.append("project[image]", formValues.coverImage[0] as Blob);
   }
