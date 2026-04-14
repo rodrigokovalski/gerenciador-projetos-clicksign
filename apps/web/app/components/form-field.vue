@@ -72,7 +72,7 @@ const props = withDefaults(
   margin: 0;
   padding: 8px 16px;
   border: 1px solid var(--ds-neutral-500);
-  border-radius: var(--ds-radius-4);
+  border-radius: var(--ds-radius-8);
   background: var(--ds-neutral-0);
   font-family: inherit;
   font-size: var(--ds-font-size-md);

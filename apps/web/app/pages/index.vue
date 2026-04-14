@@ -142,12 +142,12 @@ function toggleProjectFavorite(id: number) {
     </div>
     <div v-if="!projects.length" class="card">
       <div class="flex">
-        <Title as="h4" :color="'var(--ds-primary-800)'">
+        <Title as="h2" :color="'var(--ds-primary-800)'">
           Nenhum projeto
         </Title>
         <Paragraph>Clique no botão abaixo para criar o primeiro e gerenciá-lo.</Paragraph>
         <NuxtLink to="/add">
-          <Button class="mt-4">
+          <Button class="button--new-project mt-4">
             <PlusCircleIcon />
             Novo projeto
           </Button>
@@ -256,11 +256,14 @@ function toggleProjectFavorite(id: number) {
   align-items: center;
   gap: 8px;
 }
+.button--new-project {
+  font-size: var(--ds-font-size-xl);
+}
 .card {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: calc(100vh - 200px);
+  height: calc(100vh - 128px);
   background: white;
   border-radius: var(--ds-radius-4);
 
