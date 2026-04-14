@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Button, Card, InputFile, Label, Span, Title } from "@clicksign/design-system";
-import { ArrowLeftIcon } from "@clicksign/icons";
+import { ArrowLeftIcon, TrashIcon } from "@clicksign/icons";
+import { joinURL } from "ufo";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useForm } from "vee-validate";
 import { z } from "zod";
@@ -34,6 +35,37 @@ const { handleSubmit, errors, values, setFieldValue } = useForm({
   },
 });
 
+const objectPreviewUrl = ref<string | null>(null);
+
+watch(
+  () => values.coverImage,
+  (files) => {
+    if (objectPreviewUrl.value) {
+      URL.revokeObjectURL(objectPreviewUrl.value);
+      objectPreviewUrl.value = null;
+    }
+    const file = files?.[0];
+    if (file) {
+      objectPreviewUrl.value = URL.createObjectURL(file);
+    }
+  },
+  { deep: true },
+);
+
+onUnmounted(() => {
+  if (objectPreviewUrl.value) {
+    URL.revokeObjectURL(objectPreviewUrl.value);
+  }
+});
+
+const hasCoverPreview = computed(() => Boolean(objectPreviewUrl.value));
+
+function clearCoverImage() {
+  setFieldValue("coverImage", []);
+}
+
+const { public: pub } = useRuntimeConfig();
+
 const onSubmit = handleSubmit(async (values) => {
   const formData = new FormData();
   formData.append("project[name]", values.name);
@@ -43,7 +75,8 @@ const onSubmit = handleSubmit(async (values) => {
   if (values.coverImage && values.coverImage.length > 0) {
     formData.append("project[image]", values.coverImage[0] as Blob);
   }
-  const response = await $fetch("http://localhost:3001/api/projects", { method: "POST", body: formData });
+  const projectsCreateUrl = joinURL(String(pub.apiBaseUrl ?? "").replace(/\/$/, ""), "/api/v1/projects");
+  const response = await $fetch(projectsCreateUrl, { method: "POST", body: formData });
 
   console.log(response);
 
@@ -103,7 +136,24 @@ const onSubmit = handleSubmit(async (values) => {
             </div>
             <div class="form-group">
               <Label class="label" for="project-files">Imagem do projeto</Label>
+              <div v-if="hasCoverPreview" class="cover-preview">
+                <button
+                  type="button"
+                  class="cover-preview__remove"
+                  aria-label="Remover imagem"
+                  @click="clearCoverImage"
+                >
+                  <TrashIcon />
+                </button>
+                <img
+                  v-if="objectPreviewUrl"
+                  :src="objectPreviewUrl"
+                  alt=""
+                  class="cover-preview__img"
+                >
+              </div>
               <InputFile
+                v-else
                 input-id="project-files"
                 name="coverImage"
                 accept="image/*"
@@ -177,6 +227,42 @@ width: fit-content;
 }
 .label {
   color: var(--ds-primary-700);
+}
+.cover-preview {
+  position: relative;
+  width: 100%;
+  min-height: 170px;
+  border: 1px dashed var(--ds-neutral-200);
+  border-radius: var(--ds-radius-4);
+  background: var(--ds-neutral-0);
+  box-sizing: border-box;
+}
+.cover-preview__img {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+  object-fit: cover;
+  border-radius: var(--ds-radius-4);
+}
+.cover-preview__remove {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  border-radius: var(--ds-radius-4);
+  background: var(--ds-neutral-0);
+  color: var(--ds-primary-700);
+  box-shadow: 0 1px 4px rgb(0 0 0 / 12%);
+  cursor: pointer;
+}
+.cover-preview__remove:hover {
+  color: var(--ds-primary-800);
 }
 .span {
   color: var(--ds-neutral-500);
