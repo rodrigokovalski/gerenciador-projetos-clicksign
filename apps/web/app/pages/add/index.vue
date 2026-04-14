@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Button, Card, InputFile, Label, Span, Title } from "@clicksign/design-system";
 import { ArrowLeftIcon, TrashIcon } from "@clicksign/icons";
+import { joinURL } from "ufo";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useForm } from "vee-validate";
 import { z } from "zod";
@@ -63,6 +64,8 @@ function clearCoverImage() {
   setFieldValue("coverImage", []);
 }
 
+const { public: pub } = useRuntimeConfig();
+
 const onSubmit = handleSubmit(async (values) => {
   const formData = new FormData();
   formData.append("project[name]", values.name);
@@ -72,7 +75,8 @@ const onSubmit = handleSubmit(async (values) => {
   if (values.coverImage && values.coverImage.length > 0) {
     formData.append("project[image]", values.coverImage[0] as Blob);
   }
-  const response = await $fetch("http://localhost:3001/api/v1/projects", { method: "POST", body: formData });
+  const projectsCreateUrl = joinURL(String(pub.apiBaseUrl ?? "").replace(/\/$/, ""), "/api/v1/projects");
+  const response = await $fetch(projectsCreateUrl, { method: "POST", body: formData });
 
   console.log(response);
 
