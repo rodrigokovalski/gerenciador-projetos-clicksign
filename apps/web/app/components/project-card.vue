@@ -117,7 +117,7 @@ async function onToggleFavorite() {
       <div class="project-card__media-overlay">
         <button
           type="button"
-          class="project-card__icon-btn"
+          class="project-card__star-btn"
           :disabled="pendingFavorite"
           :aria-pressed="favorite"
           :aria-label="favorite ? 'Desfavoritar projeto' : 'Favoritar projeto'"
@@ -154,7 +154,6 @@ async function onToggleFavorite() {
     <div v-else class="project-card__toolbar">
       <button
         type="button"
-        class="project-card__icon-btn project-card__icon-btn--toolbar"
         :disabled="pendingFavorite"
         :aria-pressed="favorite"
         :aria-label="favorite ? 'Desfavoritar projeto' : 'Favoritar projeto'"
@@ -242,7 +241,6 @@ async function onToggleFavorite() {
 
 .project-card__media {
   position: relative;
-  aspect-ratio: 16 / 9;
   background: var(--ds-neutral-100);
 }
 
@@ -256,11 +254,11 @@ async function onToggleFavorite() {
 
 .project-card__media-overlay {
   position: absolute;
-  right: 12px;
-  bottom: 12px;
+  right: 16px;
+  bottom: 16px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 24px;
 }
 
 .project-card__toolbar {
@@ -292,11 +290,11 @@ async function onToggleFavorite() {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   padding: 0;
   border: none;
-  border-radius: var(--ds-radius-sm);
+  border-radius: var(--ds-radius-50);
   background: rgb(255 255 255 / 0.92);
   color: var(--ds-neutral-800);
   box-shadow: 0 2px 8px rgb(0 0 0 / 0.12);
@@ -325,6 +323,12 @@ async function onToggleFavorite() {
 
 .project-card__menu-trigger {
   color: var(--ds-neutral-700);
+}
+
+.project-card__star-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
 }
 
 .project-card__star {

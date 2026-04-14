@@ -105,10 +105,7 @@ function toggleProjectFavorite(id: number) {
         as="h2"
         :color="'var(--ds-primary-800)'"
       >
-        Projetos ({{ displayedProjects.length
-        }}<template v-if="onlyFavorites && displayedProjects.length !== projects.length">
-          de {{ projects.length }}
-        </template>)
+        Projetos
       </Title>
       <div class="header__toolbar">
         <Toggle
@@ -133,7 +130,7 @@ function toggleProjectFavorite(id: number) {
           </Select>
         </div>
         <NuxtLink to="/add" class="header__new">
-          <Button>
+          <Button class="button--new-project">
             <PlusCircleIcon />
             Novo projeto
           </Button>
@@ -152,22 +149,6 @@ function toggleProjectFavorite(id: number) {
             Novo projeto
           </Button>
         </NuxtLink>
-      </div>
-    </div>
-    <div
-      v-else-if="!displayedProjects.length"
-      class="card card--muted"
-    >
-      <div class="flex">
-        <Title as="h4" :color="'var(--ds-primary-800)'">
-          Nenhum projeto nesta visualização
-        </Title>
-        <Paragraph v-if="hasSearchFilter">
-          Nenhum projeto corresponde à busca. Ajuste o termo ou use Enter no campo de busca do cabeçalho.
-        </Paragraph>
-        <Paragraph v-else>
-          Desligue “Apenas favoritos” ou favorite um projeto para vê-lo aqui.
-        </Paragraph>
       </div>
     </div>
     <div v-else class="project-grid">
@@ -201,16 +182,12 @@ function toggleProjectFavorite(id: number) {
 .header__toolbar {
   display: flex;
   align-items: center;
-  gap: 16px;
-}
+  gap: 32px;
 
-.header__sort {
-  min-width: min(100%, 220px);
-  max-width: 280px;
-}
-
-.header__new {
-  flex-shrink: 0;
+  .button--new-project {
+    padding: 9px 32px;
+    white-space: nowrap;
+  }
 }
 
 .header__search-head {

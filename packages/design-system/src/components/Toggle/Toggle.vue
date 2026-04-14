@@ -2,7 +2,6 @@
 withDefaults(
   defineProps<{
     modelValue?: boolean;
-    /** Texto à direita do interruptor */
     label?: string;
     id?: string;
     name?: string;
@@ -94,20 +93,21 @@ function onChange(event: Event) {
 .ds-toggle__track {
   position: relative;
   flex-shrink: 0;
-  width: 44px;
+  width: 48px;
   height: 24px;
   border-radius: 999px;
-  background: var(--ds-neutral-300);
+  background: var(--ds-neutral-800);
   transition: background 0.15s ease;
 }
 
 .ds-toggle__track::after {
   content: "";
   position: absolute;
-  top: 2px;
-  left: 2px;
-  width: 20px;
-  height: 20px;
+  top: 50%;
+  left: 6px;
+  transform: translateY(-50%);
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
   background: var(--ds-neutral-0);
   box-shadow: 0 1px 2px rgb(0 0 0 / 0.12);
@@ -115,11 +115,11 @@ function onChange(event: Event) {
 }
 
 .ds-toggle__input:checked + .ds-toggle__track {
-  background: var(--ds-primary-700);
+  background: var(--ds-warning-800);
 }
 
 .ds-toggle__input:checked + .ds-toggle__track::after {
-  transform: translateX(20px);
+  transform: translate(24px, -50%);
 }
 
 .ds-toggle__label {
@@ -128,5 +128,6 @@ function onChange(event: Event) {
   font-weight: var(--ds-font-weight-regular);
   line-height: var(--ds-line-height-normal);
   color: var(--ds-neutral-900);
+  white-space: nowrap;
 }
 </style>
