@@ -46,7 +46,7 @@ function onCoverUpdate(files: File[]) {
           :error="errors.client"
         />
       </div>
-      <div class="flex">
+      <div class="grid">
         <div class="form-group">
           <FormField
             name="dataInicio"
@@ -119,10 +119,13 @@ function onCoverUpdate(files: File[]) {
   margin-bottom: 32px;
   flex: 1;
 }
-.flex {
-  display: flex;
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 16px;
-  flex-wrap: wrap;
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
 }
 .input-file {
   background-color: transparent !important;

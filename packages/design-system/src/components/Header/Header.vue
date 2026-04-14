@@ -14,5 +14,6 @@
   background: var(--ds-neutral-900);
   border-bottom: 1px solid var(--ds-neutral-950);
   box-shadow: var(--ds-shadow-md);
+  z-index: 10;
 }
 </style>

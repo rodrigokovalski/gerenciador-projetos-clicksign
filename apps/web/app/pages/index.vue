@@ -188,6 +188,11 @@ function toggleProjectFavorite(id: number) {
     padding: 9px 32px;
     white-space: nowrap;
   }
+
+  @media (max-width: 768px) {
+    gap: 16px;
+    flex-wrap: wrap;
+  }
 }
 
 .header__search-head {
@@ -272,7 +277,7 @@ function toggleProjectFavorite(id: number) {
 
 .project-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(346px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(285px, 1fr));
   gap: 24px;
 }
 </style>
