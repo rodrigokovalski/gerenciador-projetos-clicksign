@@ -69,7 +69,7 @@ function toggleProjectFavorite(id: number) {
 
 <template>
   <div>
-    <div v-if="projects.length" class="header">
+    <div v-if="projects?.length" class="header">
       <div v-if="hasSearchFilter" class="header__search-head">
         <button
           type="button"

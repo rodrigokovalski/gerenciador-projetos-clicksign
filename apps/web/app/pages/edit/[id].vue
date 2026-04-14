@@ -16,29 +16,15 @@ function toDateInputValue(value: string) {
 const route = useRoute();
 const projectId = computed(() => String(route.params.id));
 
-const { data: project, error } = await useFetch<ProjectType>(
-  () => `${env.API_BASE_URL}/api/v1/projects/${projectId.value}`,
-  { key: () => `project-edit-${projectId.value}` },
-);
-
-if (error.value || !project.value) {
-  throw createError({
-    statusCode: 404,
-    statusMessage: "Projeto não encontrado",
-  });
-}
-
-const validationSchema = toTypedSchema(projectFormSchema);
-
-const p = project.value;
+const { data: project } = await useFetch<ProjectType>(`${env.API_BASE_URL}/api/v1/projects/${projectId.value}`);
 
 const { handleSubmit, errors, values, setFieldValue, setErrors } = useForm({
-  validationSchema,
+  validationSchema: toTypedSchema(projectFormSchema),
   initialValues: {
-    name: p.name,
-    client: p.client,
-    start_date: toDateInputValue(p.start_date),
-    end_date: toDateInputValue(p.end_date),
+    name: project?.value?.name ?? "",
+    client: project?.value?.client ?? "",
+    start_date: toDateInputValue(project?.value?.start_date ?? ""),
+    end_date: toDateInputValue(project?.value?.end_date ?? ""),
     coverImage: [] as File[],
   },
 });
