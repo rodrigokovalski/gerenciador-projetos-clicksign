@@ -3,7 +3,8 @@ import { z } from "zod";
 const publicEnvSchema = z.object({
   NUXT_PUBLIC_API_BASE_URL: z
     .string()
-    .min(1, { message: "Defina NUXT_PUBLIC_API_BASE_URL no .env" }),
+    .min(1, { message: "Defina NUXT_PUBLIC_API_BASE_URL no .env" })
+    .transform(value => value.trim().replace(/\/+$/, "")),
 });
 
 export type PublicEnv = z.infer<typeof publicEnvSchema>;

@@ -1,7 +1,12 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 
+/** Evita `base + "/api/..."` virar `//api/...` quando a env termina com `/`. */
+function normalizePublicApiBaseUrl(raw: string | undefined): string {
+  return (raw ?? "").trim().replace(/\/+$/, "");
+}
+
 function hostnameFromApiBase(): string | null {
-  const raw = process.env.NUXT_PUBLIC_API_BASE_URL?.trim();
+  const raw = normalizePublicApiBaseUrl(process.env.NUXT_PUBLIC_API_BASE_URL);
   if (!raw)
     return null;
   try {
@@ -17,7 +22,7 @@ const apiHost = hostnameFromApiBase();
 export default defineNuxtConfig({
   runtimeConfig: {
     public: {
-      apiBaseUrl: process.env.NUXT_PUBLIC_API_BASE_URL ?? "",
+      apiBaseUrl: normalizePublicApiBaseUrl(process.env.NUXT_PUBLIC_API_BASE_URL),
     },
   },
   image: {
