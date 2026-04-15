@@ -140,6 +140,7 @@ function toggleProjectFavorite(id: number) {
         v-for="project in displayedProjects"
         :id="project.id"
         :key="project.id"
+        :search-query="searchFilter"
         :name="project.name"
         :client="project.client"
         :start-date="project.start_date"

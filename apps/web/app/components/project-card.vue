@@ -17,18 +17,27 @@ import {
   StarOutlinedIcon,
   TrashIcon,
 } from "@clicksign/icons";
+import { splitTextBySearchHighlight } from "~/lib/highlight-search-text";
 
 const env = usePublicEnv();
 
-const props = defineProps<{
-  id: number;
-  name: string;
-  client: string;
-  startDate: string;
-  endDate: string;
-  favorite: boolean;
-  imageUrl?: string | null;
-}>();
+const props = withDefaults(
+  defineProps<{
+    id: number;
+    name: string;
+    client: string;
+    startDate: string;
+    endDate: string;
+    favorite: boolean;
+    imageUrl?: string | null;
+    searchQuery?: string;
+  }>(),
+  { searchQuery: "" },
+);
+
+const nameSearchSegments = computed(() =>
+  splitTextBySearchHighlight(props.name, props.searchQuery),
+);
 
 const emit = defineEmits<{
   deleted: [];
@@ -196,7 +205,17 @@ async function onToggleFavorite() {
     </div>
     <div class="project-card__body">
       <Title as="h4" :color="titleColor">
-        {{ name }}
+        <template v-for="(segment, index) in nameSearchSegments" :key="index">
+          <mark
+            v-if="segment.highlight"
+            class="project-card__name-highlight"
+          >
+            {{ segment.text }}
+          </mark>
+          <template v-else>
+            {{ segment.text }}
+          </template>
+        </template>
       </Title>
       <Paragraph size="sm" :color="metaColor">
         Cliente: {{ client }}
@@ -362,6 +381,11 @@ async function onToggleFavorite() {
   gap: 8px;
   padding: 16px;
   flex: 1;
+}
+
+.project-card__name-highlight {
+  border-radius: 2px;
+  background: #ffeb3b;
 }
 
 .project-card__dates {
