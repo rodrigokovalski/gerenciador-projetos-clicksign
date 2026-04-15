@@ -7,5 +7,5 @@ const EnvSchema = z.object({
 export type Env = z.infer<typeof EnvSchema>;
 
 export default EnvSchema.parse({
-  API_BASE_URL: process.env.API_BASE_URL ?? "http://localhost:3001",
+  API_BASE_URL: process.env.API_BASE_URL ?? "https://gerenciador-projetos-clicksign.onrender.com/",
 });
