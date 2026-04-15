@@ -12,7 +12,7 @@ Monorepo: Nuxt 4 em `apps/web`, Rails 8 em `apps/api`, pacotes em `packages/*`. 
 ## Instalação
 
 ```bash
-git clone <url-do-repositório>
+git clone https://github.com/rodrigokovalski/gerenciador-projetos-clicksign
 cd gerenciador-projetos-clicksign
 pnpm install
 cd apps/api && bundle install && bin/rails db:prepare
