@@ -20,14 +20,6 @@ function hostnameFromApiBase(): string | null {
 const apiHost = hostnameFromApiBase();
 
 export default defineNuxtConfig({
-  runtimeConfig: {
-    public: {
-      apiBaseUrl: normalizePublicApiBaseUrl(process.env.NUXT_PUBLIC_API_BASE_URL),
-    },
-  },
-  image: {
-    domains: apiHost ? [apiHost] : [],
-  },
   modules: [
     "@nuxt/image",
     "@vee-validate/nuxt",
@@ -37,5 +29,13 @@ export default defineNuxtConfig({
     "./app/assets/css/main.css",
     "@clicksign/tokens/theme.css",
   ],
+  runtimeConfig: {
+    public: {
+      apiBaseUrl: normalizePublicApiBaseUrl(process.env.NUXT_PUBLIC_API_BASE_URL),
+    },
+  },
   compatibilityDate: "2025-07-15",
+  image: {
+    domains: apiHost ? [apiHost] : [],
+  },
 });

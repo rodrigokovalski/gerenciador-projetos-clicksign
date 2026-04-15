@@ -17,6 +17,7 @@ import {
   StarOutlinedIcon,
   TrashIcon,
 } from "@clicksign/icons";
+
 const env = usePublicEnv();
 
 const props = defineProps<{
