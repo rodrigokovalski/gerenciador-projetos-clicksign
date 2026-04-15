@@ -150,11 +150,5 @@ function blurSearchField() {
   box-sizing: border-box;
   display: flex;
   align-items: center;
-  padding-inline: max(12px, env(safe-area-inset-left))
-    max(12px, env(safe-area-inset-right));
-}
-
-.app-header__search-full :deep(.ds-search) {
-  width: 100%;
 }
 </style>

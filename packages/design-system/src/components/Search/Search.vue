@@ -65,6 +65,7 @@ function onInput(event: Event) {
   border-radius: var(--ds-radius-4);
   background: var(--ds-neutral-0);
   color: var(--ds-neutral-600);
+  height: 100%;
 }
 
 .ds-search:focus-within {
