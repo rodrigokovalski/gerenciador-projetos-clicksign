@@ -40,7 +40,6 @@ const metaColor = "var(--ds-neutral-600)";
 const pendingDelete = ref(false);
 const pendingFavorite = ref(false);
 const deleteModalOpen = ref(false);
-/** Fecha o menu ao remontar o Dropdown após ações. */
 const menuKey = ref(0);
 
 function bumpMenuKey() {
@@ -244,7 +243,6 @@ async function onToggleFavorite() {
 
 .project-card__media {
   position: relative;
-  overflow: hidden;
   width: 100%;
   aspect-ratio: 16 / 9;
   max-height: 235px;
