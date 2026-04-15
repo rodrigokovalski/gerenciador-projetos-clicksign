@@ -4,12 +4,14 @@ import { Meta } from "@storybook/addon-docs/blocks";
 
 # Gerenciador de projetos - Clicksign
 
+![Gerenciador-de-projetos-clicksign](https://gerenciador-projetos-clicksign-web.vercel.app/image.png)
 
-O monorepo se divide na arquitetura abaixo e criei dessa forma tanto porque queria facilitar o processo de desenvolvimento, quando para organizar e escalar o projeto. Assim temos:
+O monorepo se divide na arquitetura abaixo e criei dessa forma tanto porque queria facilitar o processo de desenvolvimento, quanto para compartilhar os pacotes que criei sem precisar publicá-los no npm ou algo parecido. Dessa forma eu rodo tudo junto, se eu altero meus pacotes vejo o resultado da alteração na minha aplicação que já está rodando e evito problemas de versão ou build na hora de deployar. Já que dá pra orquestrar tudo isso com o Turborepo.
 
+- Turborepo e pnpm workspaces para orquestrar deploy e facilitar a execução de comandos entre as aplicações.
 - Fonte única para componentes visuais, onde podemos criar testes unitários e fazer a ponte entre fronts e designers.
-- Fonte única para icones, caso precisemos modificar a fonte ou utilizar uma biblioteca de mercado.
-- Fonte única para tokens, para que tanto o design system quando as aplicações front end consumam. Evitando duplicação.
+- Fonte única para icones, caso precisemos modificar um ícone criado ou utilizar uma biblioteca de mercado.
+- Fonte única para tokens, para que tanto o design system quando as aplicações front end a consumam. Evitando duplicação.
 
 ```
 apps/
@@ -25,6 +27,7 @@ packages/
 *Front end da aplicação*
 - Nuxt
 - Vee-validate e zod *para validação de formulários e variáveis de ambiente*<br />
+- Os componentes criados são compostos com os componentes do design-system, e também possuem regras de negócio.
 <br/>
 <strong>api/</strong> <br />
 *Back end da aplicação*
@@ -44,4 +47,10 @@ DELETE /api/v1/projects/:id
 A ideia aqui é sempre importar nossos ícones onde eles possam ser facilmente modificados. Caso a gente precise atualizar a biblioteca, essa é nossa fonte da verdade.
 
 <strong>design-system/</strong><br />
-contém os componentes, testes unitários desses componentes e a documentação que você está lendo agora. <br /><br />
+contém os componentes, testes unitários desses componentes e a documentação que você está lendo agora.
+- Aqui adicionei todos os componentes que eu considero reutilizáveis no layout.
+- Todos eles seguem o padrão: <br />
+ &nbsp;&nbsp;Component.vue<br />
+ &nbsp;&nbsp;Component.spec.ts<br />
+ &nbsp;&nbsp;Component.stories.ts<br />
+- A ideia aqui é ter apenas testes unitários, então deixei alguns de exemplo. Apenas testam se o componente é renderizado.
