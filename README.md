@@ -18,6 +18,12 @@ pnpm install
 cd apps/api && bundle install && bin/rails db:prepare
 ```
 
+## Variáveis de ambiente
+Em **apps/web/** crie um arquivo .env e adicione:
+```
+NUXT_PUBLIC_API_BASE_URL=http://localhost:3001
+```
+
 ## Rodar o projeto
 
 Na **raiz** do repositório:
