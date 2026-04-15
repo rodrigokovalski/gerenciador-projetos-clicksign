@@ -202,7 +202,7 @@ async function onToggleFavorite() {
       title="Remover projeto"
     >
       <Paragraph class="project-card__modal-body">
-        Essa ação removerá definitivamente o projeto:<br />
+        Essa ação removerá definitivamente o projeto:<br>
         <strong class="project-card__modal-body-name">{{ name }}</strong>
       </Paragraph>
       <template #footer>

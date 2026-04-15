@@ -5,7 +5,7 @@ import { toTypedSchema } from "@vee-validate/zod";
 import { useForm } from "vee-validate";
 import env from "~/lib/env";
 import { projectFormSchema } from "~/lib/zod-schemas";
-import type { ProjectType } from "../projects.types";
+import type { ProjectType } from "~/lib/projects.types";
 
 function toDateInputValue(value: string) {
   if (!value)

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Button, InputFile, Label } from "@clicksign/design-system";
 import { CalendarCheckLightIcon, CalendarDayLightIcon, TrashIcon } from "@clicksign/icons";
-import type { FormErrorsType } from "~/pages/projects.types";
+import type { FormErrorsType } from "~/lib/projects.types";
 
 withDefaults(
   defineProps<{

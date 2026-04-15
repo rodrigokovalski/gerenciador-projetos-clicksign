@@ -6,7 +6,7 @@ const props = withDefaults(
   defineProps<{
     modelValue: boolean;
     title?: string;
-    /** Se `false`, Esc não fecha o diálogo (backdrop continua nativo do `<dialog>`). */
+    /** Se `false`, Esc não fecha o diálogo (elemento nativo dialog do HTML). */
     closable?: boolean;
   }>(),
   {
@@ -81,7 +81,7 @@ function onCancel(event: Event) {
           </slot>
         </div>
       </div>
-      <hr class="ds-modal__divider" />
+      <hr class="ds-modal__divider">
       <div class="ds-modal__body">
         <slot />
       </div>
