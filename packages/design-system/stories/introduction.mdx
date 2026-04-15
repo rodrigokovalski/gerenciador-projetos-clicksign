@@ -1,0 +1,47 @@
+import { Meta } from "@storybook/addon-docs/blocks";
+
+<Meta title="Gerenciador de projetos Clicksign" />
+
+# Gerenciador de projetos - Clicksign
+
+
+O monorepo se divide na arquitetura abaixo e criei dessa forma tanto porque queria facilitar o processo de desenvolvimento, quando para organizar e escalar o projeto. Assim temos:
+
+- Fonte única para componentes visuais, onde podemos criar testes unitários e fazer a ponte entre fronts e designers.
+- Fonte única para icones, caso precisemos modificar a fonte ou utilizar uma biblioteca de mercado.
+- Fonte única para tokens, para que tanto o design system quando as aplicações front end consumam. Evitando duplicação.
+
+```
+apps/
+    web/
+    api/
+packages/
+    tokens/
+    icons/
+    design-system/
+```
+
+<strong>web/</strong> <br />
+*Front end da aplicação*
+- Nuxt
+- Vee-validate e zod *para validação de formulários e variáveis de ambiente*<br />
+<br/>
+<strong>api/</strong> <br />
+*Back end da aplicação*
+contém a API desenvolvida em Rails
+```
+GET    /api/v1/projects
+POST   /api/v1/projects
+GET    /api/v1/projects/:id
+PATCH  /api/v1/projects/:id
+DELETE /api/v1/projects/:id
+```
+
+<strong>tokens/</strong> <br />
+*contém variáveis de cor, fonte, espaçamentos, sombras e etc.*<br /><br />
+<strong>icons/</strong><br />
+*contém os ícones utilizados na aplicação*.<br />
+A ideia aqui é sempre importar nossos ícones onde eles possam ser facilmente modificados. Caso a gente precise atualizar a biblioteca, essa é nossa fonte da verdade.
+
+<strong>design-system/</strong><br />
+contém os componentes, testes unitários desses componentes e a documentação que você está lendo agora. <br /><br />
