@@ -22,10 +22,13 @@
   --ds-error-800: #9f0000;
   --ds-error-600: #c40000;
 
+  --ds-warning-800: #FFB23D;
+
   --ds-neutral-0: #fff;
   --ds-neutral-100: #ECECEC;
   --ds-neutral-200: #dcdcdc;
   --ds-neutral-500: #717171;
+  --ds-neutral-800: #53525D;
   --ds-neutral-900: #1c1930;
   --ds-neutral-950: #000;
 
@@ -33,6 +36,7 @@
   --ds-radius-8: 8px;
   --ds-radius-sm: 16px;
   --ds-radius-lg: 26px;
+  --ds-radius-50: 50%;
 
   --ds-shadow-md: 0 4px 4px 0 rgb(0 0 0 / 25%);
 }

@@ -30,6 +30,10 @@ withDefaults(
   border-radius: var(--ds-radius-lg);
   padding: 14px 32px;
   border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .ds-button--primary {

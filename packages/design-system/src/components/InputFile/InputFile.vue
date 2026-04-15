@@ -107,7 +107,7 @@ function onFileChange(event: Event) {
   box-sizing: border-box;
   min-height: 170px;
   padding: 24px 16px;
-  border: 1px dashed var(--ds-neutral-200);
+  border: 1px dashed var(--ds-neutral-500);
   border-radius: var(--ds-radius-4);
   background: var(--ds-neutral-0);
   width: 100%;
@@ -137,7 +137,7 @@ function onFileChange(event: Event) {
 
 .ds-input-file__icon {
   display: flex;
-  color: var(--ds-primary-700);
+  color: var(--ds-neutral-500);
 }
 
 </style>

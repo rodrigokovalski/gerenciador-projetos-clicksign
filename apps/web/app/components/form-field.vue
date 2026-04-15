@@ -10,6 +10,7 @@ const props = withDefaults(
     disabled?: boolean;
     placeholder?: string;
     showRequired?: boolean;
+    icon?: Component;
   }>(),
   {
     error: undefined,
@@ -17,6 +18,7 @@ const props = withDefaults(
     disabled: false,
     placeholder: undefined,
     showRequired: true,
+    icon: undefined,
   },
 );
 </script>
@@ -28,15 +30,22 @@ const props = withDefaults(
       <span v-if="props.showRequired" class="hint">(Obrigatório)</span>
     </legend>
     <Field v-slot="{ field }" :name="props.name">
-      <input
-        v-bind="field"
-        :id="field.name"
-        :type="props.type"
-        :disabled="props.disabled"
-        :placeholder="props.placeholder"
-        class="ds-input"
-        :class="{ 'ds-input--error': props.error }"
-      >
+      <div class="ds-input__container">
+        <input
+          v-bind="field"
+          :id="field.name"
+          :type="props.type"
+          :disabled="props.disabled"
+          :placeholder="props.placeholder"
+          class="ds-input"
+          :class="{ 'ds-input--error': props.error }"
+        >
+        <component
+          :is="props.icon"
+          v-if="props.icon"
+          class="ds-input__icon"
+        />
+      </div>
     </Field>
     <p v-if="props.error" class="field-error">
       {{ props.error }}
@@ -45,6 +54,18 @@ const props = withDefaults(
 </template>
 
 <style scoped>
+.ds-input__container {
+  position: relative;
+}
+
+.ds-input__icon {
+  position: absolute;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: var(--ds-neutral-0);
+}
+
 .fieldset {
   border: none;
   padding: 0;
@@ -72,7 +93,7 @@ const props = withDefaults(
   margin: 0;
   padding: 8px 16px;
   border: 1px solid var(--ds-neutral-500);
-  border-radius: var(--ds-radius-4);
+  border-radius: var(--ds-radius-8);
   background: var(--ds-neutral-0);
   font-family: inherit;
   font-size: var(--ds-font-size-md);
@@ -109,5 +130,4 @@ const props = withDefaults(
   font-size: var(--ds-font-size-sm);
   color: var(--ds-error-600);
 }
-
 </style>

@@ -1,24 +1,11 @@
 <script setup lang="ts">
-import { Button, Card, InputFile, Label, Span, Title } from "@clicksign/design-system";
-import { ArrowLeftIcon, TrashIcon } from "@clicksign/icons";
-import { joinURL } from "ufo";
+import { Card, Span, Title } from "@clicksign/design-system";
+import { ArrowLeftIcon } from "@clicksign/icons";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useForm } from "vee-validate";
-import { z } from "zod";
-
-type Project = {
-  id: number;
-  name: string;
-  client: string;
-  start_date: string;
-  end_date: string;
-  favorite: boolean;
-  image_url?: string | null;
-};
-
-function wordCount(value: string) {
-  return value.trim().split(/\s+/).filter(Boolean).length;
-}
+import env from "~/lib/env";
+import { projectFormSchema } from "~/lib/zod-schemas";
+import type { ProjectType } from "~/lib/projects.types";
 
 function toDateInputValue(value: string) {
   if (!value)
@@ -29,48 +16,15 @@ function toDateInputValue(value: string) {
 const route = useRoute();
 const projectId = computed(() => String(route.params.id));
 
-const { public: pub } = useRuntimeConfig();
+const { data: project } = await useFetch<ProjectType>(`${env.API_BASE_URL}/api/v1/projects/${projectId.value}`);
 
-const { data: project, error } = await useFetch<Project>(
-  () =>
-    joinURL(
-      String(pub.apiBaseUrl ?? "").replace(/\/$/, ""),
-      "/api/v1/projects",
-      projectId.value,
-    ),
-  { key: () => `project-edit-${projectId.value}` },
-);
-
-if (error.value || !project.value) {
-  throw createError({
-    statusCode: 404,
-    statusMessage: "Projeto não encontrado",
-  });
-}
-
-const validationSchema = toTypedSchema(
-  z.object({
-    name: z.string().refine(value => wordCount(value) >= 2, {
-      message: "Por favor, digite ao menos duas palavras",
-    }),
-    client: z.string().refine(value => wordCount(value) >= 1, {
-      message: "Por favor, digite ao menos uma palavra",
-    }),
-    dataInicio: z.coerce.date({ error: () => "Selecione uma data válida" }),
-    dataFim: z.coerce.date({ error: () => "Selecione uma data válida" }),
-    coverImage: z.array(z.instanceof(File)).optional(),
-  }),
-);
-
-const p = project.value;
-
-const { handleSubmit, errors, values, setFieldValue } = useForm({
-  validationSchema,
+const { handleSubmit, errors, values, setFieldValue, setErrors } = useForm({
+  validationSchema: toTypedSchema(projectFormSchema),
   initialValues: {
-    name: p.name,
-    client: p.client,
-    dataInicio: toDateInputValue(p.start_date),
-    dataFim: toDateInputValue(p.end_date),
+    name: project?.value?.name ?? "",
+    client: project?.value?.client ?? "",
+    start_date: toDateInputValue(project?.value?.start_date ?? ""),
+    end_date: toDateInputValue(project?.value?.end_date ?? ""),
     coverImage: [] as File[],
   },
 });
@@ -122,26 +76,32 @@ function clearCoverImage() {
 }
 
 const onSubmit = handleSubmit(async (formValues) => {
-  const formData = new FormData();
-  formData.append("project[name]", formValues.name);
-  formData.append("project[client]", formValues.client);
-  formData.append("project[start_date]", new Date(formValues.dataInicio).toISOString());
-  formData.append("project[end_date]", new Date(formValues.dataFim).toISOString());
-  if (formValues.coverImage && formValues.coverImage.length > 0) {
-    formData.append("project[image]", formValues.coverImage[0] as Blob);
-  }
-  else if (currentCoverDismissed.value) {
-    formData.append("project[remove_image]", "true");
-  }
-  await $fetch(
-    joinURL(String(pub.apiBaseUrl ?? "").replace(/\/$/, ""), "/api/v1/projects", projectId.value),
-    {
-      method: "PATCH",
-      body: formData,
-    },
-  );
+  try {
+    const formData = new FormData();
+    formData.append("project[name]", formValues.name);
+    formData.append("project[client]", formValues.client);
+    formData.append("project[start_date]", new Date(formValues.start_date).toISOString());
+    formData.append("project[end_date]", new Date(formValues.end_date).toISOString());
+    if (formValues.coverImage && formValues.coverImage.length > 0) {
+      formData.append("project[image]", formValues.coverImage[0] as Blob);
+    }
+    else if (currentCoverDismissed.value) {
+      formData.append("project[remove_image]", "true");
+    }
+    await $fetch(
+      `${env.API_BASE_URL}/api/v1/projects/${projectId.value}`,
+      {
+        method: "PATCH",
+        body: formData,
+      },
+    );
 
-  navigateTo("/");
+    await navigateTo("/");
+  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  catch (e: any) {
+    setErrors(e.data.errors);
+  }
 });
 </script>
 
@@ -160,78 +120,17 @@ const onSubmit = handleSubmit(async (formValues) => {
     </div>
     <div class="content">
       <Card class="card">
-        <div class="form">
-          <form @submit.prevent="onSubmit">
-            <div class="form-group">
-              <FormField
-                name="name"
-                label="Nome do projeto"
-                :error="errors.name"
-              />
-            </div>
-            <div class="form-group">
-              <FormField
-                name="client"
-                label="Cliente"
-                :error="errors.client"
-              />
-            </div>
-            <div class="flex">
-              <div class="form-group">
-                <FormField
-                  name="dataInicio"
-                  label="Data de início"
-                  type="date"
-                  :error="errors.dataInicio"
-                />
-              </div>
-              <div class="form-group">
-                <FormField
-                  name="dataFim"
-                  label="Data final"
-                  type="date"
-                  :error="errors.dataFim"
-                />
-              </div>
-            </div>
-            <div class="form-group">
-              <Label class="label" for="project-files">Imagem do projeto</Label>
-              <div v-if="hasCoverPreview" class="cover-preview">
-                <button
-                  type="button"
-                  class="cover-preview__remove"
-                  aria-label="Remover imagem"
-                  @click="clearCoverImage"
-                >
-                  <TrashIcon />
-                </button>
-                <img
-                  v-if="coverDisplaySrc"
-                  :src="coverDisplaySrc"
-                  alt=""
-                  class="cover-preview__img"
-                >
-              </div>
-              <InputFile
-                v-else
-                input-id="project-files"
-                name="coverImage"
-                accept="image/*"
-                :multiple="false"
-                class="input-file"
-                :model-value="values.coverImage"
-                @update:model-value="files => setFieldValue('coverImage', files)"
-              >
-                <template #description>
-                  Escolha uma imagem .jpg ou .png no seu dispositivo (opcional para manter a atual)
-                </template>
-              </InputFile>
-            </div>
-            <Button type="submit" class="button">
-              Salvar alterações
-            </Button>
-          </form>
-        </div>
+        <ProjectForm
+          :errors="errors"
+          :cover-image-value="values.coverImage"
+          :has-cover-preview="hasCoverPreview"
+          :cover-display-src="coverDisplaySrc"
+          submit-label="Salvar alterações"
+          image-description="Escolha uma imagem .jpg ou .png no seu dispositivo (opcional para manter a atual)"
+          @submit="onSubmit"
+          @clear-cover="clearCoverImage"
+          @update:cover-image="files => setFieldValue('coverImage', files)"
+        />
       </Card>
     </div>
   </div>
@@ -254,74 +153,12 @@ const onSubmit = handleSubmit(async (formValues) => {
   }
 }
 .link-container {
-width: fit-content;
+  width: fit-content;
 }
 .link {
   display: flex;
   align-items: center;
   gap: 8px;
   color: var(--ds-primary-700);
-}
-.form {
-  max-width: 760px;
-  margin: 0 auto;
-  width: 100%;
-}
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-bottom: 32px;
-  flex: 1;
-}
-.flex {
-    display: flex;
-    gap: 16px;
-    flex-wrap: wrap;
-}
-.input-file {
-  background-color: transparent !important;
-}
-.button {
-  width: 100%;
-}
-.label {
-  color: var(--ds-primary-700);
-}
-.cover-preview {
-  position: relative;
-  width: 100%;
-  min-height: 170px;
-  border: 1px dashed var(--ds-neutral-200);
-  border-radius: var(--ds-radius-4);
-  background: var(--ds-neutral-0);
-  box-sizing: border-box;
-}
-.cover-preview__img {
-  display: block;
-  margin: 0 auto;
-  max-width: 100%;
-  object-fit: cover;
-  border-radius: var(--ds-radius-4);
-}
-.cover-preview__remove {
-  position: absolute;
-  top: 12px;
-  right: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  padding: 0;
-  border: none;
-  border-radius: var(--ds-radius-4);
-  background: var(--ds-neutral-0);
-  color: var(--ds-primary-700);
-  box-shadow: 0 1px 4px rgb(0 0 0 / 12%);
-  cursor: pointer;
-}
-.cover-preview__remove:hover {
-  color: var(--ds-primary-800);
 }
 </style>

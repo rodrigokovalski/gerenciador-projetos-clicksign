@@ -1,29 +1,13 @@
 <script setup lang="ts">
 import { Button, Paragraph, Select, Title, Toggle } from "@clicksign/design-system";
 import { ArrowLeftIcon, PlusCircleIcon } from "@clicksign/icons";
-import { joinURL } from "ufo";
+import env from "~/lib/env";
+import type { ProjectType, SortKeyType } from "~/lib/projects.types";
 
-type Project = {
-  id: number;
-  name: string;
-  client: string;
-  start_date: string;
-  end_date: string;
-  favorite: boolean;
-  image_url?: string | null;
-};
-
-type SortKey = "alphabetical" | "start_recent" | "deadline_soon";
-
-const { public: pub } = useRuntimeConfig();
-const projectsListUrl = joinURL(String(pub.apiBaseUrl ?? "").replace(/\/$/, ""), "/api/v1/projects");
-
-const { data: projects } = await useFetch<Project[]>(projectsListUrl, {
-  default: () => [],
-});
+const { data: projects } = await useFetch<ProjectType[]>(`${env.API_BASE_URL}/api/v1/projects`);
 
 const onlyFavorites = ref(false);
-const sortBy = ref<SortKey>("alphabetical");
+const sortBy = ref<SortKeyType>("alphabetical");
 const searchFilter = useState<string>("projects-search-filter", () => "");
 const searchDraft = useState<string>("projects-search-query", () => "");
 
@@ -70,22 +54,22 @@ function removeProject(id: number) {
   const list = projects.value;
   if (!list)
     return;
-  projects.value = list.filter(p => p.id !== id);
+  projects.value = list.filter(project => project.id !== id);
 }
 
 function toggleProjectFavorite(id: number) {
   const list = projects.value;
   if (!list)
     return;
-  projects.value = list.map(p =>
-    p.id === id ? { ...p, favorite: !p.favorite } : p,
+  projects.value = list.map(project =>
+    project.id === id ? { ...project, favorite: !project.favorite } : project,
   );
 }
 </script>
 
 <template>
   <div>
-    <div v-if="projects.length" class="header">
+    <div v-if="projects?.length" class="header">
       <div v-if="hasSearchFilter" class="header__search-head">
         <button
           type="button"
@@ -105,10 +89,7 @@ function toggleProjectFavorite(id: number) {
         as="h2"
         :color="'var(--ds-primary-800)'"
       >
-        Projetos ({{ displayedProjects.length
-        }}<template v-if="onlyFavorites && displayedProjects.length !== projects.length">
-          de {{ projects.length }}
-        </template>)
+        Projetos
       </Title>
       <div class="header__toolbar">
         <Toggle
@@ -133,7 +114,7 @@ function toggleProjectFavorite(id: number) {
           </Select>
         </div>
         <NuxtLink to="/add" class="header__new">
-          <Button>
+          <Button class="button--new-project">
             <PlusCircleIcon />
             Novo projeto
           </Button>
@@ -142,32 +123,16 @@ function toggleProjectFavorite(id: number) {
     </div>
     <div v-if="!projects.length" class="card">
       <div class="flex">
-        <Title as="h4" :color="'var(--ds-primary-800)'">
+        <Title as="h2" :color="'var(--ds-primary-800)'">
           Nenhum projeto
         </Title>
         <Paragraph>Clique no botão abaixo para criar o primeiro e gerenciá-lo.</Paragraph>
         <NuxtLink to="/add">
-          <Button class="mt-4">
+          <Button class="button--new-project mt-4">
             <PlusCircleIcon />
             Novo projeto
           </Button>
         </NuxtLink>
-      </div>
-    </div>
-    <div
-      v-else-if="!displayedProjects.length"
-      class="card card--muted"
-    >
-      <div class="flex">
-        <Title as="h4" :color="'var(--ds-primary-800)'">
-          Nenhum projeto nesta visualização
-        </Title>
-        <Paragraph v-if="hasSearchFilter">
-          Nenhum projeto corresponde à busca. Ajuste o termo ou use Enter no campo de busca do cabeçalho.
-        </Paragraph>
-        <Paragraph v-else>
-          Desligue “Apenas favoritos” ou favorite um projeto para vê-lo aqui.
-        </Paragraph>
       </div>
     </div>
     <div v-else class="project-grid">
@@ -201,16 +166,17 @@ function toggleProjectFavorite(id: number) {
 .header__toolbar {
   display: flex;
   align-items: center;
-  gap: 16px;
-}
+  gap: 32px;
 
-.header__sort {
-  min-width: min(100%, 220px);
-  max-width: 280px;
-}
+  .button--new-project {
+    padding: 9px 32px;
+    white-space: nowrap;
+  }
 
-.header__new {
-  flex-shrink: 0;
+  @media (max-width: 768px) {
+    gap: 16px;
+    flex-wrap: wrap;
+  }
 }
 
 .header__search-head {
@@ -256,11 +222,14 @@ function toggleProjectFavorite(id: number) {
   align-items: center;
   gap: 8px;
 }
+.button--new-project {
+  font-size: var(--ds-font-size-xl);
+}
 .card {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: calc(100vh - 200px);
+  height: calc(100vh - 128px);
   background: white;
   border-radius: var(--ds-radius-4);
 
@@ -292,7 +261,7 @@ function toggleProjectFavorite(id: number) {
 
 .project-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(346px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(285px, 1fr));
   gap: 24px;
 }
 </style>

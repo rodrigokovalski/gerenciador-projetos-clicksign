@@ -17,9 +17,7 @@ import {
   StarOutlinedIcon,
   TrashIcon,
 } from "@clicksign/icons";
-import { joinURL } from "ufo";
-
-const { public: pub } = useRuntimeConfig();
+import env from "~/lib/env";
 
 const props = defineProps<{
   id: number;
@@ -49,10 +47,6 @@ function bumpMenuKey() {
   menuKey.value += 1;
 }
 
-function projectResourceUrl(id: number) {
-  return joinURL(String(pub.apiBaseUrl ?? "").replace(/\/$/, ""), "/api/v1/projects", String(id));
-}
-
 function formatDateDisplay(value: string) {
   const d = new Date(value);
   if (Number.isNaN(d.getTime()))
@@ -74,7 +68,7 @@ async function confirmDelete() {
     return;
   pendingDelete.value = true;
   try {
-    await $fetch(projectResourceUrl(props.id), { method: "DELETE" });
+    await $fetch(`${env.API_BASE_URL}/api/v1/projects/${props.id}`, { method: "DELETE" });
     emit("deleted");
     deleteModalOpen.value = false;
   }
@@ -93,7 +87,7 @@ async function onToggleFavorite() {
     return;
   pendingFavorite.value = true;
   try {
-    await $fetch(projectResourceUrl(props.id), {
+    await $fetch(`${env.API_BASE_URL}/api/v1/projects/${props.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: { project: { favorite: !props.favorite } },
@@ -117,7 +111,7 @@ async function onToggleFavorite() {
       <div class="project-card__media-overlay">
         <button
           type="button"
-          class="project-card__icon-btn"
+          class="project-card__star-btn"
           :disabled="pendingFavorite"
           :aria-pressed="favorite"
           :aria-label="favorite ? 'Desfavoritar projeto' : 'Favoritar projeto'"
@@ -154,7 +148,6 @@ async function onToggleFavorite() {
     <div v-else class="project-card__toolbar">
       <button
         type="button"
-        class="project-card__icon-btn project-card__icon-btn--toolbar"
         :disabled="pendingFavorite"
         :aria-pressed="favorite"
         :aria-label="favorite ? 'Desfavoritar projeto' : 'Favoritar projeto'"
@@ -208,25 +201,28 @@ async function onToggleFavorite() {
       v-model="deleteModalOpen"
       title="Remover projeto"
     >
-      <Paragraph>
-        Tem certeza de que deseja remover o projeto <strong>{{ name }}</strong>? Esta ação não pode ser desfeita.
+      <Paragraph class="project-card__modal-body">
+        Essa ação removerá definitivamente o projeto:<br>
+        <strong class="project-card__modal-body-name">{{ name }}</strong>
       </Paragraph>
       <template #footer>
-        <Button
-          type="button"
-          variant="outlined"
-          :disabled="pendingDelete"
-          @click="closeDeleteModal"
-        >
-          Cancelar
-        </Button>
-        <Button
-          type="button"
-          :disabled="pendingDelete"
-          @click="confirmDelete"
-        >
-          Remover
-        </Button>
+        <div class="project-card__modal-footer">
+          <Button
+            type="button"
+            variant="outlined"
+            :disabled="pendingDelete"
+            @click="closeDeleteModal"
+          >
+            Cancelar
+          </Button>
+          <Button
+            type="button"
+            :disabled="pendingDelete"
+            @click="confirmDelete"
+          >
+            Confirmar
+          </Button>
+        </div>
       </template>
     </Modal>
   </Card>
@@ -242,7 +238,6 @@ async function onToggleFavorite() {
 
 .project-card__media {
   position: relative;
-  aspect-ratio: 16 / 9;
   background: var(--ds-neutral-100);
 }
 
@@ -256,11 +251,11 @@ async function onToggleFavorite() {
 
 .project-card__media-overlay {
   position: absolute;
-  right: 12px;
-  bottom: 12px;
+  right: 16px;
+  bottom: 16px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 24px;
 }
 
 .project-card__toolbar {
@@ -292,11 +287,11 @@ async function onToggleFavorite() {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   padding: 0;
   border: none;
-  border-radius: var(--ds-radius-sm);
+  border-radius: var(--ds-radius-50);
   background: rgb(255 255 255 / 0.92);
   color: var(--ds-neutral-800);
   box-shadow: 0 2px 8px rgb(0 0 0 / 0.12);
@@ -325,6 +320,12 @@ async function onToggleFavorite() {
 
 .project-card__menu-trigger {
   color: var(--ds-neutral-700);
+}
+
+.project-card__star-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
 }
 
 .project-card__star {
@@ -359,5 +360,24 @@ async function onToggleFavorite() {
 .project-card__divider {
   border-top: 1px solid var(--ds-neutral-100);
   margin: 16px 0;
+}
+
+.project-card__modal-body {
+  text-align: center;
+}
+
+.project-card__modal-footer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  width: 100%;
+}
+
+.project-card__modal-body-name {
+  color: var(--ds-neutral-900);
+  margin-top: 16px;
+  display: block;
+  font-size: var(--ds-font-size-2xl);
+  font-weight: var(--ds-font-weight-normal);
 }
 </style>

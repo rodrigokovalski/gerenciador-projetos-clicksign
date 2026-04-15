@@ -38,16 +38,14 @@ withDefaults(
   margin: 0;
   padding: 8px 10px;
   border: none;
-  border-radius: var(--ds-radius-sm);
   background: transparent;
-  color: var(--ds-neutral-900);
-  font: 500 14px/1.4 system-ui, sans-serif;
+  color: var(--ds-primary-700);
   text-align: left;
   cursor: pointer;
 }
 
 .ds-dropdown-item:hover:not(:disabled) {
-  background: var(--ds-neutral-100);
+  color: var(--ds-primary-800);
 }
 
 .ds-dropdown-item:focus-visible {
