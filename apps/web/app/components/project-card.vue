@@ -103,11 +103,17 @@ async function onToggleFavorite() {
 <template>
   <Card class="project-card">
     <div v-if="imageUrl" class="project-card__media">
-      <img
+      <NuxtImg
         :src="imageUrl"
         :alt="name"
         class="project-card__image"
-      >
+        width="640"
+        height="360"
+        sizes="(max-width: 640px) 100vw, (max-width: 1200px) 50vw, 320px"
+        loading="lazy"
+        decoding="async"
+        format="webp"
+      />
       <div class="project-card__media-overlay">
         <button
           type="button"
@@ -238,19 +244,26 @@ async function onToggleFavorite() {
 
 .project-card__media {
   position: relative;
+  overflow: hidden;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: 235px;
+  margin-inline: auto;
   background: var(--ds-neutral-100);
 }
 
 .project-card__image {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
-  max-height: 235px;
   height: 100%;
   object-fit: cover;
 }
 
 .project-card__media-overlay {
   position: absolute;
+  z-index: 1;
   right: 16px;
   bottom: 16px;
   display: flex;
