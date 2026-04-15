@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button, Paragraph, Select, Title, Toggle } from "@clicksign/design-system";
+import { Button, Paragraph, Select, Span, Title, Toggle } from "@clicksign/design-system";
 import { ArrowLeftIcon, PlusCircleIcon } from "@clicksign/icons";
 import type { ProjectType, SortKeyType } from "~/lib/projects.types";
 
@@ -71,15 +71,17 @@ function toggleProjectFavorite(id: number) {
   <div>
     <div v-if="projects?.length" class="header">
       <div v-if="hasSearchFilter" class="header__search-head">
-        <button
-          type="button"
-          class="header__back-search"
-          aria-label="Voltar e limpar busca"
-          @click="clearSearch"
-        >
-          <ArrowLeftIcon class="header__back-search-icon" aria-hidden="true" />
-          Voltar
-        </button>
+        <Span class="link-container">
+          <button
+            type="button"
+            class="link"
+            aria-label="Voltar e limpar busca"
+            @click="clearSearch"
+          >
+            <ArrowLeftIcon aria-hidden="true" />
+            Voltar
+          </button>
+        </Span>
         <Title as="h2" :color="'var(--ds-primary-800)'">
           Resultados da busca
         </Title>
@@ -188,35 +190,27 @@ function toggleProjectFavorite(id: number) {
   min-width: 0;
 }
 
-.header__back-search {
-  display: inline-flex;
+.link-container {
+  width: fit-content;
+}
+
+.link {
+  display: flex;
   align-items: center;
   gap: 8px;
   margin: 0;
-  padding: 6px 10px 6px 6px;
-  border: 1px solid var(--ds-neutral-400);
-  border-radius: var(--ds-radius-4);
-  background: var(--ds-neutral-0);
-  font-family: inherit;
-  font-size: var(--ds-font-size-md);
-  font-weight: var(--ds-font-weight-regular);
-  line-height: var(--ds-line-height-normal);
-  color: var(--ds-neutral-800);
+  padding: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  color: var(--ds-primary-700);
+  text-align: inherit;
   cursor: pointer;
 }
 
-.header__back-search:hover {
-  background: var(--ds-neutral-200);
-}
-
-.header__back-search:focus-visible {
+.link:focus-visible {
   outline: 2px solid var(--ds-primary-700);
   outline-offset: 2px;
-}
-
-.header__back-search-icon {
-  flex-shrink: 0;
-  color: var(--ds-neutral-700);
 }
 .button {
   display: flex;

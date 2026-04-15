@@ -3,7 +3,6 @@ export type SearchHighlightSegment = {
   highlight: boolean;
 };
 
-
 export function splitTextBySearchHighlight(
   text: string,
   searchQuery: string,
