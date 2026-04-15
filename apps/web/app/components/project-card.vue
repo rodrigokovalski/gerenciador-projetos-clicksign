@@ -47,10 +47,18 @@ function bumpMenuKey() {
 }
 
 function formatDateDisplay(value: string) {
-  const d = new Date(value);
-  if (Number.isNaN(d.getTime()))
+  const trimmed = value.trim();
+  const ymd = /^(\d{4})-(\d{2})-(\d{2})$/.exec(trimmed);
+  if (ymd) {
+    const y = Number(ymd[1]);
+    const m = Number(ymd[2]) - 1;
+    const d = Number(ymd[3]);
+    return new Date(y, m, d).toLocaleDateString("pt-BR");
+  }
+  const parsed = new Date(trimmed);
+  if (Number.isNaN(parsed.getTime()))
     return value;
-  return d.toLocaleDateString("pt-BR");
+  return parsed.toLocaleDateString("pt-BR");
 }
 
 function openDeleteModal() {

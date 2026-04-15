@@ -53,8 +53,8 @@ const onSubmit = handleSubmit(async (formValues) => {
     const formData = new FormData();
     formData.append("project[name]", formValues.name);
     formData.append("project[client]", formValues.client);
-    formData.append("project[start_date]", new Date(formValues.start_date).toISOString());
-    formData.append("project[end_date]", new Date(formValues.end_date).toISOString());
+    formData.append("project[start_date]", formValues.start_date);
+    formData.append("project[end_date]", formValues.end_date);
     if (formValues.coverImage && formValues.coverImage.length > 0) {
       formData.append("project[image]", formValues.coverImage[0] as Blob);
     }
