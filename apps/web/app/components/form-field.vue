@@ -21,6 +21,13 @@ const props = withDefaults(
     icon: undefined,
   },
 );
+
+function onIconClick() {
+  if (props.type === "date") {
+    const input = document.getElementById(props.name) as HTMLInputElement;
+    input?.showPicker();
+  }
+}
 </script>
 
 <template>
@@ -40,11 +47,12 @@ const props = withDefaults(
           class="ds-input"
           :class="{ 'ds-input--error': props.error }"
         >
-        <!-- <component
+        <component
           :is="props.icon"
           v-if="props.icon"
           class="ds-input__icon"
-        /> -->
+          @click="onIconClick"
+        />
       </div>
     </Field>
     <p v-if="props.error" class="field-error">
@@ -64,6 +72,7 @@ const props = withDefaults(
   top: 50%;
   transform: translateY(-50%);
   background: var(--ds-neutral-0);
+  color: var(--ds-neutral-500);
 }
 
 .fieldset {
