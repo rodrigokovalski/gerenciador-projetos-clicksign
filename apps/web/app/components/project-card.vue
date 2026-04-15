@@ -201,25 +201,28 @@ async function onToggleFavorite() {
       v-model="deleteModalOpen"
       title="Remover projeto"
     >
-      <Paragraph>
-        Tem certeza de que deseja remover o projeto <strong>{{ name }}</strong>? Esta ação não pode ser desfeita.
+      <Paragraph class="project-card__modal-body">
+        Essa ação removerá definitivamente o projeto:<br />
+        <strong class="project-card__modal-body-name">{{ name }}</strong>
       </Paragraph>
       <template #footer>
-        <Button
-          type="button"
-          variant="outlined"
-          :disabled="pendingDelete"
-          @click="closeDeleteModal"
-        >
-          Cancelar
-        </Button>
-        <Button
-          type="button"
-          :disabled="pendingDelete"
-          @click="confirmDelete"
-        >
-          Remover
-        </Button>
+        <div class="project-card__modal-footer">
+          <Button
+            type="button"
+            variant="outlined"
+            :disabled="pendingDelete"
+            @click="closeDeleteModal"
+          >
+            Cancelar
+          </Button>
+          <Button
+            type="button"
+            :disabled="pendingDelete"
+            @click="confirmDelete"
+          >
+            Confirmar
+          </Button>
+        </div>
       </template>
     </Modal>
   </Card>
@@ -357,5 +360,24 @@ async function onToggleFavorite() {
 .project-card__divider {
   border-top: 1px solid var(--ds-neutral-100);
   margin: 16px 0;
+}
+
+.project-card__modal-body {
+  text-align: center;
+}
+
+.project-card__modal-footer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  width: 100%;
+}
+
+.project-card__modal-body-name {
+  color: var(--ds-neutral-900);
+  margin-top: 16px;
+  display: block;
+  font-size: var(--ds-font-size-2xl);
+  font-weight: var(--ds-font-weight-normal);
 }
 </style>

@@ -1,11 +1,12 @@
 <script setup lang="ts">
+import { TrashIcon } from "@clicksign/icons";
 import { nextTick, onMounted, useTemplateRef, watch } from "vue";
 
 const props = withDefaults(
   defineProps<{
     modelValue: boolean;
     title?: string;
-    /** Exibe o botão fechar (×) e permite fechar com Esc; se `false`, chame `close()` manualmente ou use botões com `formmethod="dialog"`. */
+    /** Se `false`, Esc não fecha o diálogo (backdrop continua nativo do `<dialog>`). */
     closable?: boolean;
   }>(),
   {
@@ -48,10 +49,6 @@ function onDialogClose() {
   emit("update:modelValue", false);
 }
 
-function requestClose() {
-  dialogRef.value?.close();
-}
-
 function onCancel(event: Event) {
   if (!props.closable) {
     event.preventDefault();
@@ -69,9 +66,10 @@ function onCancel(event: Event) {
   >
     <div class="ds-modal__surface">
       <div
-        v-if="title || $slots.header || closable"
+        v-if="title || $slots.header || props.closable"
         class="ds-modal__header"
       >
+        <TrashIcon class="ds-modal__trash-icon" />
         <div class="ds-modal__header-main">
           <slot name="header">
             <h2
@@ -82,17 +80,8 @@ function onCancel(event: Event) {
             </h2>
           </slot>
         </div>
-        <button
-          v-if="closable"
-          type="button"
-          class="ds-modal__close"
-          aria-label="Fechar"
-          data-testid="ds-modal-close"
-          @click="requestClose"
-        >
-          ×
-        </button>
       </div>
+      <hr class="ds-modal__divider" />
       <div class="ds-modal__body">
         <slot />
       </div>
@@ -108,12 +97,14 @@ function onCancel(event: Event) {
 
 <style scoped>
 .ds-modal {
+  width: min(582px, calc(100vw - 32px));
   max-width: calc(100vw - 32px);
-  width: min(480px, 100%);
   margin: auto;
-  padding: 0;
+  padding: 40px 0 0;
   border: none;
   background: transparent;
+  overflow: visible;
+  box-sizing: border-box;
 }
 
 .ds-modal::backdrop {
@@ -121,24 +112,40 @@ function onCancel(event: Event) {
 }
 
 .ds-modal__surface {
-  overflow: hidden;
+  margin-top: -40px;
   border-radius: var(--ds-radius-4);
   border: 1px solid var(--ds-neutral-200);
   background: var(--ds-neutral-0);
   box-shadow: 0 16px 48px rgb(0 0 0 / 0.18);
+  overflow: visible;
+  width: 100%;
 }
 
 .ds-modal__header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 16px 16px 0;
+  text-align: center;
+  padding: 32px 32px 0;
+  position: relative;
+  overflow: visible;
+}
+
+.ds-modal__trash-icon {
+  position: absolute;
+  top: -32px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 64px;
+  height: 64px;
+  color: var(--ds-neutral-700);
+  border-radius: var(--ds-radius-50);
+  padding: 22px;
+  background: var(--ds-primary-700);
+  color: var(--ds-neutral-0);
 }
 
 .ds-modal__header-main {
   flex: 1;
   min-width: 0;
+  margin-top: 16px;
 }
 
 .ds-modal__title {
@@ -147,46 +154,15 @@ function onCancel(event: Event) {
   font-size: var(--ds-font-size-xl);
   font-weight: 600;
   line-height: var(--ds-line-height-normal);
-  color: var(--ds-neutral-900);
-}
-
-.ds-modal__close {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  margin: -6px -6px 0 0;
-  padding: 0;
-  border: none;
-  border-radius: var(--ds-radius-sm);
-  background: transparent;
-  color: var(--ds-neutral-700);
-  font-size: 1.5rem;
-  line-height: 1;
-  cursor: pointer;
-}
-
-.ds-modal__close:hover {
-  background: var(--ds-neutral-100);
-}
-
-.ds-modal__close:focus-visible {
-  outline: 2px solid var(--ds-primary-700);
-  outline-offset: 2px;
+  color: var(--ds-primary-800);
 }
 
 .ds-modal__body {
-  padding: 16px;
+  padding: 0 32px 32px;
   font-family: inherit;
   font-size: var(--ds-font-size-md);
   line-height: var(--ds-line-height-normal);
   color: var(--ds-neutral-900);
-}
-
-.ds-modal__header + .ds-modal__body {
-  padding-top: 12px;
 }
 
 .ds-modal__footer {
@@ -194,6 +170,10 @@ function onCancel(event: Event) {
   flex-wrap: wrap;
   gap: 8px;
   justify-content: flex-end;
-  padding: 0 16px 16px;
+  padding: 0 32px 32px;
+}
+.ds-modal__divider {
+  border-top: 1px solid var(--ds-neutral-200);
+  margin: 24px 32px 32px;
 }
 </style>
