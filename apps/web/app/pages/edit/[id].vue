@@ -18,7 +18,7 @@ const projectId = computed(() => String(route.params.id));
 const env = usePublicEnv();
 const { data: project } = await useFetch<ProjectType>(`${env.NUXT_PUBLIC_API_BASE_URL}/api/v1/projects/${projectId.value}`);
 
-const { handleSubmit, errors, values, setFieldValue, setErrors } = useForm({
+const { handleSubmit, errors, values, setFieldValue, setErrors, isSubmitting } = useForm({
   validationSchema: toTypedSchema(projectFormSchema),
   initialValues: {
     name: project?.value?.name ?? "",
@@ -124,6 +124,7 @@ const onSubmit = handleSubmit(async (formValues) => {
           :errors="errors"
           :cover-image-value="values.coverImage"
           :has-cover-preview="hasCoverPreview"
+          :loading="isSubmitting"
           :cover-display-src="coverDisplaySrc"
           submit-label="Salvar alterações"
           image-description="Escolha uma imagem .jpg ou .png no seu dispositivo (opcional para manter a atual)"

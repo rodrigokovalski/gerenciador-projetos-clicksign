@@ -6,7 +6,7 @@ import { useForm } from "vee-validate";
 import { projectFormSchema } from "~/lib/zod-schemas";
 
 const env = usePublicEnv();
-const { handleSubmit, errors, values, setFieldValue, setErrors } = useForm({
+const { handleSubmit, errors, values, setFieldValue, setErrors, isSubmitting } = useForm({
   validationSchema: toTypedSchema(projectFormSchema),
   initialValues: {
     name: "",
@@ -89,6 +89,7 @@ const onSubmit = handleSubmit(async (formValues) => {
           :cover-image-value="values.coverImage"
           :has-cover-preview="hasCoverPreview"
           :cover-display-src="coverDisplaySrc"
+          :loading="isSubmitting"
           submit-label="Salvar projeto"
           image-description="Escolha uma imagem .jpg ou .png no seu dispositivo"
           @submit="onSubmit"
