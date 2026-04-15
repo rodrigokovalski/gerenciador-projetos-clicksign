@@ -3,7 +3,6 @@ import { Card, Span, Title } from "@clicksign/design-system";
 import { ArrowLeftIcon } from "@clicksign/icons";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useForm } from "vee-validate";
-import env from "~/lib/env";
 import { projectFormSchema } from "~/lib/zod-schemas";
 import type { ProjectType } from "~/lib/projects.types";
 
@@ -16,7 +15,8 @@ function toDateInputValue(value: string) {
 const route = useRoute();
 const projectId = computed(() => String(route.params.id));
 
-const { data: project } = await useFetch<ProjectType>(`${env.API_BASE_URL}/api/v1/projects/${projectId.value}`);
+const env = usePublicEnv();
+const { data: project } = await useFetch<ProjectType>(`${env.NUXT_PUBLIC_API_BASE_URL}/api/v1/projects/${projectId.value}`);
 
 const { handleSubmit, errors, values, setFieldValue, setErrors } = useForm({
   validationSchema: toTypedSchema(projectFormSchema),
@@ -89,7 +89,7 @@ const onSubmit = handleSubmit(async (formValues) => {
       formData.append("project[remove_image]", "true");
     }
     await $fetch(
-      `${env.API_BASE_URL}/api/v1/projects/${projectId.value}`,
+      `${env.NUXT_PUBLIC_API_BASE_URL}/api/v1/projects/${projectId.value}`,
       {
         method: "PATCH",
         body: formData,

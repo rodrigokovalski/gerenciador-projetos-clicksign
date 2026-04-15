@@ -17,7 +17,7 @@ import {
   StarOutlinedIcon,
   TrashIcon,
 } from "@clicksign/icons";
-import env from "~/lib/env";
+const env = usePublicEnv();
 
 const props = defineProps<{
   id: number;
@@ -68,7 +68,7 @@ async function confirmDelete() {
     return;
   pendingDelete.value = true;
   try {
-    await $fetch(`${env.API_BASE_URL}/api/v1/projects/${props.id}`, { method: "DELETE" });
+    await $fetch(`${env.NUXT_PUBLIC_API_BASE_URL}/api/v1/projects/${props.id}`, { method: "DELETE" });
     emit("deleted");
     deleteModalOpen.value = false;
   }
@@ -87,7 +87,7 @@ async function onToggleFavorite() {
     return;
   pendingFavorite.value = true;
   try {
-    await $fetch(`${env.API_BASE_URL}/api/v1/projects/${props.id}`, {
+    await $fetch(`${env.NUXT_PUBLIC_API_BASE_URL}/api/v1/projects/${props.id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: { project: { favorite: !props.favorite } },

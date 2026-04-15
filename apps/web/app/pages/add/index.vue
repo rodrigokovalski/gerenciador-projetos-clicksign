@@ -3,9 +3,9 @@ import { Card, Span, Title } from "@clicksign/design-system";
 import { ArrowLeftIcon } from "@clicksign/icons";
 import { toTypedSchema } from "@vee-validate/zod";
 import { useForm } from "vee-validate";
-import env from "~/lib/env";
 import { projectFormSchema } from "~/lib/zod-schemas";
 
+const env = usePublicEnv();
 const { handleSubmit, errors, values, setFieldValue, setErrors } = useForm({
   validationSchema: toTypedSchema(projectFormSchema),
   initialValues: {
@@ -58,7 +58,7 @@ const onSubmit = handleSubmit(async (formValues) => {
     if (formValues.coverImage && formValues.coverImage.length > 0) {
       formData.append("project[image]", formValues.coverImage[0] as Blob);
     }
-    await $fetch(`${env.API_BASE_URL}/api/v1/projects`, { method: "POST", body: formData });
+    await $fetch(`${env.NUXT_PUBLIC_API_BASE_URL}/api/v1/projects`, { method: "POST", body: formData });
 
     await navigateTo("/");
   }

@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { Button, Paragraph, Select, Title, Toggle } from "@clicksign/design-system";
 import { ArrowLeftIcon, PlusCircleIcon } from "@clicksign/icons";
-import env from "~/lib/env";
 import type { ProjectType, SortKeyType } from "~/lib/projects.types";
 
-const { data: projects } = await useFetch<ProjectType[]>(`${env.API_BASE_URL}/api/v1/projects`);
+const env = usePublicEnv();
+const { data: projects } = await useFetch<ProjectType[]>(`${env.NUXT_PUBLIC_API_BASE_URL}/api/v1/projects`);
 
 const onlyFavorites = ref(false);
 const sortBy = ref<SortKeyType>("alphabetical");

@@ -40,11 +40,11 @@ const props = withDefaults(
           class="ds-input"
           :class="{ 'ds-input--error': props.error }"
         >
-        <component
+        <!-- <component
           :is="props.icon"
           v-if="props.icon"
           class="ds-input__icon"
-        />
+        /> -->
       </div>
     </Field>
     <p v-if="props.error" class="field-error">
